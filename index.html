@@ -503,8 +503,8 @@
       vessels.push({
         name: NAMES[i % NAMES.length] + (i>=NAMES.length ? ' II':''),
         imo: 9000000 + rnd(100000,999999),
-        flag: pich(FLAGS),
-        type: pich(TYPES),
+        flag: pick(FLAGS),
+        type: pick(TYPES),
         status,
         speed: status==='transit' ? rnd(8,14) : status==='cleared' ? rnd(10,16) : rnd(0,2),
         heading: rnd(0,359),
