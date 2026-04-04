@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Strait Watch â Live Strait of Hormuz Tanker Dashboard (2026 Crisis)</title>
+<meta name="description" content="Strait Watch is a live dashboard tracking tanker traffic, disruption risk, and oil reserve pressure from the Strait of Hormuz during the 2026 USâIran crisis.">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #0b1120; --card: #131b2e; --accent: #38bdf8; --danger: #ef4444;
+    --warn: #f59e0b; --ok: #22c55e; --text: #e2e8f0; --muted: #94a3b8;
+    --border: #1e293b;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); min-height:100vh; }
+
+  /* Header */
+  header { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border-bottom: 1px solid var(--border); padding: 1rem 2rem; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.5rem; }
+  header h1 { font-size:1.5rem; font-weight:700; }
+  header h1 span { color: var(--accent); }
+  .header-meta { display:flex; gap:1.5rem; align-items:center; font-size:0.85rem; color:var(--muted); flex-wrap:wrap; }
+  .live-dot { width:8px; height:8px; border-radius:50%; background:var(--ok); display:inline-block; animation: pulse 2s infinite; margin-right:4px; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  /* Config banner */
+  #config-banner { background: #1e293b; padding: 0.5rem 2rem; font-size: 0.8rem; color: var(--muted); border-bottom: 1px solid var(--border); display: flex; gap: 2rem; flex-wrap:wrap; }
+
+  /* Threat banner */
+  #threat-banner { background: linear-gradient(90deg, rgba(239,68,68,0.1), rgba(239,68,68,0.05)); border-bottom: 2px solid #ef4444; padding: 0.75rem 2rem; font-size: 0.9rem; color: #fca5a5; font-weight: 600; display: none; }
+
+  /* KPI row */
+  .kpi-row { display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:1rem; padding:1.25rem 2rem; }
+  .kpi { background: var(--card); border:1px solid var(--border); border-radius:12px; padding:1.25rem; position:relative; overflow:hidden; }
+  .kpi::before { content:''; position:absolute; top:0; left:0; width:4px; height:100%; }
+  .kpi.blue::before { background: var(--accent); }
+  .kpi.red::before { background: var(--danger); }
+  .kpi.yellow::before { background: var(--warn); }
+  .kpi.green::before { background: var(--ok); }
+  .kpi.amber::before { background: var(--warn); }
+  .kpi-label { font-size:0.75rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--muted); margin-bottom:0.35rem; }
+  .kpi-value { font-size:2rem; font-weight:700; line-height:1.1; }
+  .kpi-sub { font-size:0.8rem; color:var(--muted); margin-top:0.25rem; }
+  .kpi.blue .kpi-value { color: var(--accent); }
+  .kpi.red .kpi-value { color: var(--danger); }
+  .kpi.yellow .kpi-value { color: var(--warn); }
+  .kpi.green .kpi-value { color: var(--ok); }
+  .kpi.amber .kpi-value { color: var(--warn); }
+
+  /* Trump Countdown Badge */
+  .countdown-badge {
+    background: linear-gradient(135deg, #1e293b, #0f172a);
+    border: 2px solid var(--warn);
+    border-radius: 12px;
+    padding: 1rem;
+    color: var(--text);
+    font-size: 0.85rem;
+    font-weight: 600;
+    line-height: 1.4;
+    box-shadow: 0 0 20px rgba(245,158,11,0.15);
+  }
+  .countdown-badge .label { color: var(--warn); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem; }
+  .countdown-badge .time { font-size: 1.8rem; font-weight: 700; color: var(--warn); font-family: 'Courier New', monospace; letter-spacing: 2px; }
+  .countdown-badge.passed { border-color: var(--muted); }
+  .countdown-badge.passed .label { color: var(--muted); }
+  .countdown-badge.passed .time { color: var(--muted); }
+  .countdown-badge.passed .status { font-size: 0.8rem; color: var(--muted); margin-top: 0.5rem; }
+
+  /* Layout grid */
+  .main-grid { display:grid; grid-template-columns: 1fr 1fr; gap:1rem; padding:0 2rem 1.25rem; }
+  @media (max-width:900px) { .main-grid { grid-template-columns:1fr; } }
+
+  .panel { background: var(--card); border:1px solid var(--border); border-radius:12px; overflow:hidden; }
+  .panel-title { font-size:0.85rem; font-weight:600; padding:0.75rem 1rem; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:0.5rem; }
+
+  /* Map */
+  #map { height: 350px; width:100%; }
+
+  /* Chart */
+  #chart-wrap { padding: 0.75rem 1rem; height: 320px; }
+
+  /* Table */
+  .table-wrap { grid-column: 1 / -1; }
+  table { width:100%; border-collapse:collapse; font-size:0.82rem; }
+  th { background:#1a2235; text-align:left; padding:0.6rem 0.75rem; color:var(--muted); text-transform:uppercase; font-size:0.7rem; letter-spacing:0.04em; position:sticky; top:0; }
+  td { padding:0.55rem 0.75rem; border-bottom:1px solid var(--border); }
+  tr:hover td { background: #1a2235; }
+  tr.alert-high td { background: rgba(239,68,68,0.08); }
+  .badge { display:inline-block; padding:2px 8px; border-radius:99px; font-size:0.7rem; font-weight:600; }
+  .badge-transit { background:rgba(56,189,248,0.15); color:var(--accent); }
+  .badge-queued { background:rgba(245,158,11,0.15); color:var(--warn); }
+  .badge-anchored { background:rgba(239,68,68,0.15); color:var(--danger); }
+  .badge-cleared { background:rgba(34,197,94,0.15); color:var(--ok); }
+  .scroll-table { max-height:340px; overflow-y:auto; }
+
+  /* Barrel graphic */
+  .barrel-container { display: flex; flex-direction: column; align-items: center; gap: 1rem; padding: 1.5rem; }
+  .barrel {
+    width: 80px;
+    height: 140px;
+    background: linear-gradient(135deg, #1e293b, #0f172a);
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+  }
+  .barrel-fill {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(180deg, var(--ok) 0%, #16a34a 50%, #15803d 100%);
+    height: 100%;
+    transition: height 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    border-radius: 6px;
+  }
+  .barrel-label { font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+
+  /* Days Until Dark card */
+  .days-card { grid-column: 1 / -1; }
+  .days-card-subtitle { font-size: 0.8rem; color: var(--muted); margin-top: 0.25rem; }
+  .days-controls { display: flex; gap: 1rem; padding: 1rem; align-items: flex-start; flex-wrap: wrap; }
+  .days-selector {
+    flex: 0 1 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .days-selector label { font-size: 0.75rem; text-transform: uppercase; color: var(--muted); letter-spacing: 0.05em; }
+  .days-selector select {
+    background: #1a2235;
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    cursor: pointer;
+  }
+  .days-display { flex: 1; min-width: 200px; display: flex; align-items: center; justify-content: center; padding: 1rem; }
+  .days-big-number { font-size: 3rem; font-weight: 700; color: var(--ok); font-family: 'Courier New', monospace; }
+  .days-big-number.amber { color: var(--warn); }
+  .days-big-number.red { color: var(--danger); }
+  .days-unit { font-size: 0.9rem; color: var(--muted); margin-left: 0.5rem; }
+  .days-table-wrap { padding: 0 1rem 1rem; }
+  .days-table { width: 100%; border-collapse: collapse; font-size: 0.75rem; }
+  .days-table thead { background: #1a2235; }
+  .days-table th { padding: 0.5rem 0.5rem; color: var(--muted); text-transform: uppercase; text-align: left; font-weight: 600; }
+  .days-table td { padding: 0.4rem 0.5rem; border-bottom: 1px solid var(--border); }
+  .days-table tr:hover td { background: #1a2235; }
+  .days-table tr.critical td { background: rgba(239,68,68,0.08); }
+  .status-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 0.5rem; }
+  .status-dot.green { background: var(--ok); }
+  .status-dot.amber { background: var(--warn); }
+  .status-dot.red { background: var(--danger); }
+  .days-note { font-size: 0.7rem; color: var(--muted); padding: 0 1rem 1rem; font-style: italic; }
+
+  /* Alerts card */
+  .alerts-card { grid-column: 1 / 2; }
+  .alerts-content { padding: 1rem; }
+  .threat-level { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; padding: 0.75rem; background: rgba(0,0,0,0.3); border-radius: 8px; }
+  .threat-level-badge {
+    padding: 0.35rem 0.75rem;
+    border-radius: 99px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .threat-level-badge.low { background: rgba(34,197,94,0.2); color: var(--ok); }
+  .threat-level-badge.elevated { background: rgba(245,158,11,0.2); color: var(--warn); }
+  .threat-level-badge.high { background: rgba(239,68,68,0.2); color: var(--danger); animation: pulse-glow 2s infinite; }
+  @keyframes pulse-glow { 0%,100%{box-shadow:0 0 10px rgba(239,68,68,0.3)} 50%{box-shadow:0 0 20px rgba(239,68,68,0.6)} }
+  .threat-label { font-size: 0.8rem; color: var(--muted); }
+
+  .alerts-list { display: flex; flex-direction: column; gap: 0.5rem; }
+  .alert-item { padding: 0.75rem; background: rgba(0,0,0,0.2); border-left: 3px solid var(--border); border-radius: 4px; font-size: 0.8rem; line-height: 1.4; }
+  .alert-time { color: var(--accent); font-weight: 600; font-family: 'Courier New', monospace; }
+  .alert-source { color: var(--muted); font-size: 0.75rem; }
+  .alert-text { color: var(--text); margin-top: 0.25rem; }
+  .alert-item.strike { border-left-color: var(--danger); }
+  .alert-item.strike::before { content: 'â© '; color: var(--danger); font-weight: 700; }
+
+  .replay-btn { background: rgba(56,189,248,0.15); color: var(--accent); border: 1px solid var(--accent); border-radius: 6px; padding: 0.5rem 1rem; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: all 0.2s; margin-top: 1rem; width: 100%; }
+  .replay-btn:hover { background: rgba(56,189,248,0.25); }
+  .replay-btn:active { transform: scale(0.98); }
+
+  /* Support bar */
+  .support-bar {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    z-index: 999;
+  }
+  .support-btn {
+    background: rgba(15,23,42,0.95);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 0.65rem 1rem;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    backdrop-filter: blur(10px);
+  }
+  .support-btn:hover {
+    background: rgba(15,23,42,0.98);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  @media (max-width: 768px) {
+    .support-bar { bottom: 1rem; right: 1rem; }
+    .support-btn { font-size: 0.75rem; padding: 0.5rem 0.8rem; }
+  }
+
+  /* Action buttons */
+  .action-btns { display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap; }
+  .btn-support { background: #FF5E5B; color:#fff; border:none; border-radius:8px; padding:0.45rem 0.9rem; font-size:0.8rem; font-weight:600; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:0.35rem; transition:opacity 0.2s; }
+  .btn-support:hover { opacity:0.85; }
+  .btn-alerts { background: rgba(249,115,22,0.15); color:#fb923c; border:1px solid rgba(249,115,22,0.3); border-radius:8px; padding:0.45rem 0.9rem; font-size:0.8rem; font-weight:600; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:0.35rem; transition:background 0.2s; }
+  .btn-alerts:hover { background: rgba(249,115,22,0.25); }
+
+  /* Footer */
+  footer { text-align:center; padding:1.5rem; font-size:0.75rem; color:var(--muted); border-top:1px solid var(--border); }
+  footer a { color: var(--accent); text-decoration:none; }
+</style>
+</head>
+<body>
+
+<!-- ======================== CONFIG ======================== -->
+<script>
+  // ââ CONFIGURATION ââââââââââââââââââââââââââââââââââââââââââ
+  // To connect live AIS data via Google Sheets, set LIVE_MODE = true
+  // and paste your published-CSV URL below. See SETUP.md for details.
+  const CONFIG = {
+    LIVE_MODE:     false,
+    SHEET_CSV_URL: '',
+    REFRESH_MS:    300000,
+    DEADLINE:      '2026-04-06T20:00:00-04:00',
+  };
+
+  // Days Until Dark base data
+  const DAYS_BASE = {
+    'Netherlands': 90,
+    'Germany': 70,
+    'United Kingdom': 60,
+    'France': 90,
+    'Italy': 70,
+    'Japan': 160,
+    'South Korea': 40,
+    'India': 25,
+    'China': 60,
+    'United States': 45,
+  };
+
+  // Sample alerts (simulate with rotation)
+  const SAMPLE_ALERTS = [
+    { time: '23:12', source: 'Reuters', text: 'US CENTCOM reports intercept of drone over Gulf.', type: 'threat' },
+    { time: '21:40', source: 'IRNA', text: 'IRGC announces missile exercise near Bandar Abbas.', type: 'strike' },
+    { time: '19:05', source: 'OSINT', text: 'Possible explosions near Kharg Island reported by local sources.', type: 'strike' },
+    { time: '17:30', source: 'AP', text: 'Saudi Aramco confirms temporary halt at Ras Tanura loading terminal.', type: 'impact' },
+    { time: '15:55', source: 'Reuters', text: 'US carrier group USS Truman repositioned to northern Gulf.', type: 'military' },
+  ];
+
+  // Strike paths for replay
+  const STRIKE_PATHS = [
+    { name: 'Inland Iran â Near Kharg Island', from: [27.8, 52.5], to: [29.25, 54.0] },
+    { name: 'Central Iran â Gulf shipping lanes', from: [26.5, 54.0], to: [26.7, 56.3] },
+  ];
+</script>
+
+<header>
+  <h1>ð¢ï¸ <span>Strait Watch</span></h1>
+  <div class="header-meta">
+    <span><span class="live-dot"></span> <span id="mode-label">Simulated</span></span>
+    <span id="clock"></span>
+  </div>
+</header>
+
+<div id="config-banner">
+  <span>Mode: <strong id="banner-mode">Simulation</strong></span>
+  <span>Refresh: <strong id="banner-refresh">â</strong></span>
+  <span>Crisis: <strong>USâIran standoff (April 2026)</strong></span>
+</div>
+
+<div id="threat-banner">â ï¸ Threat activity reported near key energy/shipping targets (based on public sources).</div>
+
+<!-- Trump Countdown Badge -->
+<div style="padding: 1.25rem 2rem;">
+  <div class="countdown-badge" id="deadline-badge">
+    <div class="label">Trump April 6 Deadline</div>
+    <div class="time" id="deadline-time">--:--:--</div>
+    <div class="status" id="deadline-status"></div>
+  </div>
+</div>
+
+<!-- KPI Cards -->
+<div class="kpi-row">
+  <div class="kpi blue">
+    <div class="kpi-label">Vessels in Transit</div>
+    <div class="kpi-value" id="kpi-transit">â</div>
+    <div class="kpi-sub">Currently moving through strait</div>
+  </div>
+  <div class="kpi yellow">
+    <div class="kpi-label">Queued / Waiting</div>
+    <div class="kpi-value" id="kpi-queued">â</div>
+    <div class="kpi-sub">Anchored near approaches</div>
+  </div>
+  <div class="kpi red">
+    <div class="kpi-label">Avg Wait (hrs)</div>
+    <div class="kpi-value" id="kpi-wait">â</div>
+    <div class="kpi-sub">Mean anchor time before transit</div>
+  </div>
+  <div class="kpi green">
+    <div class="kpi-label">24h Throughput</div>
+    <div class="kpi-value" id="kpi-throughput">â</div>
+    <div class="kpi-sub">Vessels cleared last 24 hrs</div>
+  </div>
+</div>
+
+<!-- Map + Chart + Days Until Dark -->
+<div class="main-grid">
+  <div class="panel">
+    <div class="panel-title">ð Live Vessel Map â Strait of Hormuz</div>
+    <div id="map"></div>
+  </div>
+  <div class="panel">
+    <div class="panel-title">ð 24-Hour Transit Volume</div>
+    <div id="chart-wrap"><canvas id="transitChart"></canvas></div>
+  </div>
+
+  <!-- Days Until Dark -->
+  <div class="panel days-card">
+    <div class="panel-title">â½ Days Until Dark</div>
+    <div style="padding: 0.75rem 1rem; border-bottom: 1px solid var(--border);">
+      <div class="days-card-subtitle">Estimated days of oil cover if the Strait of Hormuz stays at current disruption levels.</div>
+    </div>
+    <div class="days-controls">
+      <div class="days-selector">
+        <label for="country-select">Country</label>
+        <select id="country-select">
+          <option value="Netherlands">Netherlands</option>
+          <option value="Germany">Germany</option>
+          <option value="United Kingdom">United Kingdom</option>
+          <option value="France">France</option>
+          <option value="Italy">Italy</option>
+          <option value="Japan">Japan</option>
+          <option value="South Korea">South Korea</option>
+          <option value="India">India</option>
+          <option value="China">China</option>
+          <option value="United States">United States</option>
+        </select>
+      </div>
+      <div class="days-display">
+        <div class="barrel-container">
+          <div class="barrel">
+            <div class="barrel-fill" id="barrel-fill"></div>
+          </div>
+          <div style="text-align: center;">
+            <div style="display: flex; align-items: baseline; justify-content: center;">
+              <div class="days-big-number" id="days-value">90</div>
+              <div class="days-unit">days</div>
+            </div>
+            <div class="barrel-label" id="barrel-label">Oil cover remaining</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="days-table-wrap">
+      <table class="days-table">
+        <thead>
+          <tr>
+            <th>Country</th>
+            <th>Days Left</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="days-table-body"></tbody>
+      </table>
+    </div>
+    <div class="days-note">Approximate estimates based on public reserve data and Strait Watch disruption index. Not an official government figure.</div>
+  </div>
+
+  <!-- Strike & Threat Alerts + Replay -->
+  <div class="panel alerts-card">
+    <div class="panel-title">ð¨ Strike & Threat Alerts (OSINT)</div>
+    <div class="alerts-content">
+      <div class="threat-level">
+        <span class="threat-label">Threat Level:</span>
+        <span class="threat-level-badge" id="threat-badge">Low</span>
+        <span id="threat-label-text" style="color: var(--ok); font-size: 0.8rem; font-weight: 600;"></span>
+      </div>
+      <div class="alerts-list" id="alerts-list"></div>
+      <button class="replay-btn" id="replay-btn">â¶ Replay last strike</button>
+    </div>
+  </div>
+
+  <!-- Vessel Table -->
+  <div class="panel table-wrap">
+    <div class="panel-title">ð¢ Vessel Register</div>
+    <div class="scroll-table">
+      <table>
+        <thead>
+          <tr><th>Vessel Name</th><th>IMO</th><th>Flag</th><th>Type</th><th>Status</th><th>Speed (kn)</th><th>Heading</th><th>Last Seen (UTC)</th></tr>
+        </thead>
+        <tbody id="vessel-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<footer>
+  Built by <a href="https://github.com/xadon108/strait-watch" target="_blank" rel="noopener">Strait Watch</a> Â· Data simulated unless connected to AIS feed Â· <a href="https://github.com/xadon108/strait-watch" id="gh-link" target="_blank" rel="noopener">GitHub</a>
+</footer>
+
+<!-- Support Bar -->
+<div class="support-bar">
+  <a class="support-btn" href="https://ko-fi.com/hormuzpulse" target="_blank" rel="noopener">â Support</a>
+  <a class="support-btn" href="https://hormuzpulse.substack.com" target="_blank" rel="noopener">ð§ Alerts</a>
+</div>
+
+<!-- ======================== APP LOGIC ======================== -->
+<script>
+(function(){
+  // ââ Helpers ââ
+  const $ = s => document.querySelector(s);
+  const now = () => new Date();
+
+  // ââ Deadline Countdown ââ
+  function updateDeadline(){
+    const deadlineDate = new Date('2026-04-06T20:00:00-04:00');
+    const diff = deadlineDate - now();
+    const badge = $('#deadline-badge');
+    const timeEl = $('#deadline-time');
+    const statusEl = $('#deadline-status');
+
+    if(diff > 0){
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const secs = Math.floor((diff % (1000 * 60)) / 1000);
+
+      const dStr = String(days).padStart(2,'0');
+      const hStr = String(hours).padStart(2,'0');
+      const mStr = String(mins).padStart(2,'0');
+      const sStr = String(secs).padStart(2,'0');
+
+      timeEl.textContent = `${dStr}d ${hStr}h ${mStr}m ${sStr}s`;
+      statusEl.textContent = '';
+      badge.classList.remove('passed');
+    } else {
+      timeEl.textContent = '--:--:--';
+      statusEl.textContent = 'Trump deadline passed â monitoring for follow-up actions.';
+      badge.classList.add('passed');
+    }
+  }
+  updateDeadline();
+  setInterval(updateDeadline, 1000);
+
+  // Clock
+  function tick(){
+    $('#clock').textContent = now().toUTCString().slice(0,-4)+' UTC';
+  }
+  tick();
+  setInterval(tick, 1000);
+
+  // ââ Simulated Vessel Data ââ
+  const FLAGS = ['ð¸ð¦ SAU','ð®ð· IRN','ð¦ðª UAE','ð°ð¼ KWT','ð®ð¶ IRQ','ð¶ð¦ QAT','ð®ð³ IND','ð¨ð³ CHN','ð¬ð· GRC','ð¯ðµ JPN','ð°ð· KOR','ð³ð´ NOR','ð±ð· LBR','ð²ð­ MHL','ðµð¦ PAN'];
+  const TYPES = ['VLCC','Suezmax','Aframax','LNG Carrier','Product Tanker'];
+  const STATUSES = ['transit','queued','anchored','cleared'];
+  const NAMES = [
+    'Front Endurance','Nissos Rhenia','Al Dafna','Celsius Riga','Eagle Vancouver',
+    'Maran Sagitta','Suez Rajan','DHT Hawk','Gener8 Athena','Hafnia Phoenix',
+    'Kriti Amber','Leon Dias','Nordic Zenith','Olympic Luck','Pacific Voyager',
+    'Qatar Spirit','Ridgebury Pioneer','Stena Sunrise','Torm Alexandra','United Vigor',
+    'Bahri Yanbu','Celsius Tokyo','Desert Falcon','Emirates Glory','Falcon Confidence',
+    'Gulf Coral','Hyundai Prestige','Ionic Artemis','Jag Lakshya','Kapetan Markos',
+    'Lila Mumbai','Minerva Zenia','New Prosperity','Orient Treasure','Pluto Glory',
+    'Reem Star','Sakura Express','Tanker Halo','Umm Lulu','Voyager Dawn',
+  ];
+
+  function rnd(a,b){ return Math.floor(Math.random()*(b-a+1))+a; }
+  function pick(arr){ return arr[rnd(0,arr.length-1)]; }
+
+  function generateVessels(){
+    const n = rnd(28,45);
+    const vessels = [];
+    for(let i=0;i<n;i++){
+      const status = pick(STATUSES);
+      const lat = 26.2 + (Math.random()-0.5)*0.8;
+      const lng = 56.2 + (Math.random()-0.5)*0.9;
+      vessels.push({
+        name: NAMES[i % NAMES.length] + (i>=NAMES.length ? ' II':''),
+        imo: 9000000 + rnd(100000,999999),
+        flag: pich(FLAGS),
+        type: pich(TYPES),
+        status,
+        speed: status==='transit' ? rnd(8,14) : status==='cleared' ? rnd(10,16) : rnd(0,2),
+        heading: rnd(0,359),
+        lat, lng,
+        lastSeen: new Date(Date.now() - rnd(0, 7200000)).toISOString().slice(0,16).replace('T',' ')+' UTC',
+      });
+    }
+    return vessels;
+  }
+
+  // ââ Live Data Fetcher ââ
+  async function fetchLiveData(){
+    if(!CONFIG.SHEET_CSV_URL) return null;
+    try {
+      const res = await fetch(CONFIG.SHEET_CSV_URL);
+      const text = await res.text();
+      const lines = text.trim().split('\n');
+      const headers = lines[0].split(',').map(h=>h.trim().toLowerCase());
+      return lines.slice(1).map(line => {
+        const cols = line.split(',');
+        const obj = {};
+        headers.forEach((h,i) => obj[h] = (cols[i]||'').trim());
+        return {
+          name: obj.name || obj.vessel || 'Unknown',
+          imo: obj.imo || 'â',
+          flag: obj.flag || 'â',
+          type: obj.type || 'Tanker',
+          status: (obj.status||'transit').toLowerCase(),
+          speed: parseFloat(obj.speed)||0,
+          heading: parseInt(obj.heading)||0,
+          lat: parseFloat(obj.lat)||26.2,
+          lng: parseFloat(obj.lng)||56.2,
+          lastSeen: obj.lastseen || obj.last_seen || obj.timestamp || 'â',
+        };
+      });
+    } catch(e) { console.warn('CSV fetch failed, falling back to simulation', e); return null; }
+  }
+
+  // ââ Map Setup ââ
+  const map = L.map('map',{zoomControl:false}).setView([26.35, 56.25], 9);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{
+    attribution:'Â© OpenStreetMap Â© CARTO', maxZoom:18
+  }).addTo(map);
+  L.control.zoom({position:'bottomright'}).addTo(map);
+
+  // Strait polygon highlight
+  L.polygon([
+    [26.6,56.0],[26.7,56.5],[26.4,56.7],[26.0,56.5],[26.1,56.0]
+  ],{color:'#38bdf8',weight:1,fillOpacity:0.06,dashArray:'6 4'}).addTo(map).bindPopup('Strait of Hormuz â Transit Zone');
+
+  // Strike replay path polyline (not visible by default)
+  let strikePolyline = null;
+
+  let markers = [];
+  function statusColor(s){
+    return s==='transit'?'#38bdf8':s==='queued'?'#f59e0b':s==='anchored'?'#ef4444':'#22c55e';
+  }
+
+  function plotVessels(vessels){
+    markers.forEach(m=>map.removeLayer(m));
+    markers=[];
+    vessels.forEach(v=>{
+      const c = statusColor(v.status);
+      const m = L.circleMarker([v.lat,v.lng],{radius:5,color:c,fillColor:c,fillOpacity:0.8,weight:1})
+        .bindPopup(`<b>${v.name}</b><br>${v.flag} Â· ${v.type}<br>Status: ${v.status}<br>Speed: ${v.speed} kn`)
+        .addTo(map);
+      markers.push(m);
+    });
+  }
+
+  // ââ Chart Setup ââ
+  const ctx = $('#transitChart').getContext('2d');
+  const chartLabels = Array.from({length:24},(_,i)=>`${String(i).padStart(2,'0')}:00`);
+  const chart = new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels: chartLabels,
+      datasets:[{
+        label:'Transits',
+        data: chartLabels.map(()=>rnd(1,6)),
+        backgroundColor:'rgba(56,189,248,0.5)',
+        borderColor:'#38bdf8',
+        borderWidth:1, borderRadius:4,
+      }]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{display:false} },
+      scales:{
+        x:{ ticks:{color:'#94a3b8',font:{size:10}}, grid:{color:'#1e293b'} },
+        y:{ ticks:{color:'#94a3b8'}, grid:{color:'#1e293b'}, beginAtZero:true }
+      }
+    }
+  });
+
+  // ââ Days Until Dark Logic ââ
+  let globalThroughput = 1.0; // Simulate disruption factor
+
+  function updateDaysUntilDark(){
+    const country = $('#country-select').value;
+    const baseDays = DAYS_BASE[country];
+    const disruptionFactor = globalThroughput;
+    const daysLeft = Math.max(0, baseDays * disruptionFactor);
+
+    // Update barrel fill and number
+    const fillPercent = (daysLeft / baseDays) * 100;
+    $('#barrel-fill').style.height = fillPercent + '%';
+
+    const displayDays = daysLeft.toFixed(1);
+    $('#days-value').textContent = displayDays;
+
+    // Update color
+    const daysNum = parseFloat(displayDays);
+    const daysEl = $('#days-value');
+    daysEl.classList.remove('amber', 'red');
+    if(daysNum < 10) daysEl.classList.add('red');
+    else if(daysNum < 30) daysEl.classList.add('amber');
+
+    // Update table
+    const tbody = $('#days-table-body');
+    tbody.innerHTML = '';
+    Object.entries(DAYS_BASE).forEach(([cname, cbase]) => {
+      const cdays = Math.max(0, cbase * disruptionFactor);
+      const isSelected = cname === country;
+      const isCritical = cdays < 5;
+
+      let statusClass = 'green';
+      if(cdays < 10) statusClass = 'red';
+      else if(cdays < 30) statusClass = 'amber';
+
+      const row = document.createElement('tr');
+      if(isCritical) row.classList.add('critical');
+      row.innerHTML = `
+        <td><strong>${cname}${isSelected ? ' â' : ''}</strong></td>
+        <td>${cdays.toFixed(1)}</td>
+        <td><span class="status-dot ${statusClass}"></span>${cdays < 5 ? 'â ' : ''}</td>
+      `;
+      tbody.appendChild(row);
+    });
+  }
+
+  $('#country-select').addEventListener('change', updateDaysUntilDark);
+
+  // ââ Threat Alerts Logic ââ
+  let currentAlerts = [];
+  let lastStrikeIdx = -1;
+
+  function analyzeThreatLevel(alerts){
+    const threatKeywords = ['Hormuz', 'Kharg', 'Gulf shipping lanes', 'US bases in Gulf'];
+    const strikeKeywords = ['strike', 'attack', 'drone', 'missile', 'explosions'];
+
+    let hasThreatkeyword = alerts.some(a => threatKeywords.some(k => a.text.includes(k)));
+    let hasStrikeKeyword = alerts.some(a => strikeKeywords.some(k => a.text.toLowerCase().includes(k)));
+
+    if(hasThreatkeyword) return 'high';
+    if(hasStrikeKeyword) return 'elevated';
+    return 'low';
+  }
+
+  function updateAlerts(){
+    // Rotate alerts with randomness
+    currentAlerts = [];
+    const alertsToShow = SAMPLE_ALERTS.slice(0, 5);
+    for(let i = 0; i < alertsToShow.length; i++){
+      const alert = alertsToShow[i];
+      const minutesAgo = (i * 30 + rnd(5, 25));
+      const alertTime = new Date(now().getTime() - minutesAgo * 60000);
+      currentAlerts.push({
+        ...alert,
+        time: alertTime.toISOString().slice(11, 16),
+        type: alert.type
+      });
+    }
+
+    // Determine threat level
+    const threatLevel = analyzeThreatLevel(currentAlerts);
+    const badge = $('#threat-badge');
+    const threatLabelEl = $('#threat-label-text');
+    badge.classList.remove('low', 'elevated', 'high');
+    badge.classList.add(threatLevel);
+    badge.textContent = threatLevel.charAt(0).toUpperCase() + threatLevel.slice(1);
+
+    if(threatLevel === 'high'){
+      threatLabelEl.textContent = '(High risk)';
+      $('#threat-banner').style.display = 'block';
+    } else {
+      threatLabelEl.textContent = threatLevel === 'elevated' ? '(Elevated risk)' : '';
+      $('#threat-banner').style.display = 'none';
+    }
+
+    // Render alerts list
+    const alertsList = $('#alerts-list');
+    alertsList.innerHTML = '';
+    currentAlerts.forEach((alert, idx) => {
+      const isStrike = alert.type === 'strike';
+      if(isStrike) lastStrikeIdx = idx;
+      const div = document.createElement('div');
+      div.className = `alert-item ${isStrike ? 'strike' : ''}`;
+      div.innerHTML = `
+        <div class="alert-time">${alert.time}</div>
+        <div class="alert-source">â ${alert.source}</div>
+        <div class="alert-text">${alert.text}</div>
+      `;
+      alertsList.appendChild(div);
+    });
+  }
+
+  // ââ Strike Replay ââ
+  $('#replay-btn').addEventListener('click', function(){
+    if(lastStrikeIdx === -1){
+      lastStrikeIdx = 0;
+    }
+    const strikePath = STRIKE_PATHS[lastStrikeIdx % STRIKE_PATHS.length];
+
+    // Remove old polyline if exists
+    if(strikePolyline){
+      map.removeLayer(strikePolyline);
+    }
+
+    // Create SVG canvas overlay for animated line drawing
+    const canvas = document.createElement('canvas');
+    canvas.width = map.getSize().x;
+    canvas.height = map.getSize().y;
+    canvas.style.position = 'absolute';
+    canvas.style.top = '0';
+    canvas.style.left = '0';
+    canvas.style.pointerEvents = 'none';
+    canvas.style.zIndex = '500';
+
+    const mapContainer = map.getContainer();
+    mapContainer.style.position = 'relative';
+    mapContainer.appendChild(canvas);
+
+    const ctx = canvas.getContext('2d');
+    const fromLatLng = L.latLng(strikePath.from[0], strikePath.from[1]);
+    const toLatLng = L.latLng(strikePath.to[0], strikePath.to[1]);
+    const fromPixel = map.latLngToContainerPoint(fromLatLng);
+    const toPixel = map.latLngToContainerPoint(toLatLng);
+
+    const startTime = now().getTime();
+    const duration = 2000; // 2 second animation
+
+    function animate(){
+      const elapsed = now().getTime() - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Easing function
+      const easeProgress = progress < 0.5
+        ? 2 * progress * progress
+        : -1 + (4 - 2 * progress) * progress;
+
+      // Draw line
+      ctx.strokeStyle = '#ef4444';
+      ctx.lineWidth = 2;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.beginPath();
+      ctx.moveTo(fromPixel.x, fromPixel.y);
+
+      const currentX = fromPixel.x + (toPixel.x - fromPixel.x) * easeProgress;
+      const currentY = fromPixel.y + (toPixel.y - fromPixel.y) * easeProgress;
+      ctx.lineTo(currentX, currentY);
+      ctx.stroke();
+
+      // Draw start dot
+      ctx.fillStyle = 'rgba(239,68,68,0.6)';
+      ctx.beginPath();
+      ctx.arc(fromPixel.x, fromPixel.y, 5, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Draw end dot
+      ctx.fillStyle = 'rgba(239,68,68,0.8)';
+      ctx.beginPath();
+      ctx.arc(currentX, currentY, 6, 0, Math.PI * 2);
+      ctx.fill();
+
+      if(progress < 1){
+        requestAnimationFrame(animate);
+      } else {
+        // Keep line on map but fade slightly after animation completes
+        ctx.globalAlpha = 0.5;
+        ctx.strokeStyle = '#ef4444';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(fromPixel.x, fromPixel.y);
+        ctx.lineTo(toPixel.x, toPixel.y);
+        ctx.stroke();
+        ctx.globalAlpha = 1.0;
+      }
+    }
+
+    animate();
+  });
+
+  // ââ Render ââ
+  function render(vessels){
+    const transit = vessels.filter(v=>v.status==='transit').length;
+    const queued  = vessels.filter(v=>v.status==='queued').length;
+    const anchored = vessels.filter(v=>v.status==='anchored').length;
+    const cleared = vessels.filter(v=>v.status==='cleared').length;
+
+    $('#kpi-transit').textContent = transit;
+    $('#kpi-queued').textContent = queued + anchored;
+    $('#kpi-wait').textContent = (rnd(4,18) + Math.random()).toFixed(1);
+    $('#kpi-throughput').textContent = cleared;
+
+    // Simulate disruption factor (ranges 0.3-1.0)
+    globalThroughput = 0.3 + Math.random() * 0.7;
+
+    updateDaysUntilDark();
+    updateAlerts();
+
+    // Table
+    const tbody = $('#vessel-tbody');
+    tbody.innerHTML = '';
+    vessels.sort((a,b)=>STATUSES.indexOf(a.status)-STATUSES.indexOf(b.status)).forEach(v=>{
+      const badgeClass = `badge-${v.status}`;
+      tbody.innerHTML += `<tr>
+        <td><strong>${v.name}</strong></td>
+        <td>${v.imo}</td>
+        <td>${v.flag}</td>
+        <td>${v.type}</td>
+        <td><span class="badge ${badgeClass}">${v.status}</span></td>
+        <td>${v.speed}</td>
+        <td>${v.heading}Â°</td>
+        <td>${v.lastSeen}</td>
+      </tr>`;
+    });
+
+    plotVessels(vessels);
+
+    // Update chart with slight randomness
+    chart.data.datasets[0].data = chartLabels.map(()=>rnd(1,7));
+    chart.update('none');
+  }
+
+  // ââ Main Loop ââ
+  async function update(){
+    let vessels;
+    if(CONFIG.LIVE_MODE && CONFIG.SHEET_CSV_URL){
+      vessels = await fetchLiveData();
+      if(vessels){
+        $('#mode-label').textContent = 'Live AIS';
+        $('#banner-mode').textContent = 'Live (Google Sheet)';
+      }
+    }
+    if(!vessels){
+      vessels = generateVessels();
+      $('#mode-label').textContent = 'Simulated';
+      $('#banner-mode').textContent = 'Simulation';
+    }
+    $('#banner-refresh').textContent = (CONFIG.REFRESH_MS/1000)+'s';
+    render(vessels);
+  }
+
+  update();
+  setInterval(update, CONFIG.REFRESH_MS);
+})();
+</script>
+</body>
+</html>
