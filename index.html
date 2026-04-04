@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Strait Watch â Live Strait of Hormuz Tanker Dashboard (2026 Crisis)</title>
-<meta name="description" content="Strait Watch is a live dashboard tracking tanker traffic, disruption risk, and oil reserve pressure from the Strait of Hormuz during the 2026 USâIran crisis.">
+<title>Strait Watch – Live Strait of Hormuz Tanker Dashboard (2026 Crisis)</title>
+<meta name="description" content="Strait Watch is a live dashboard tracking tanker traffic, disruption risk, and oil reserve pressure from the Strait of Hormuz during the 2026 US–Iran crisis.">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -181,7 +181,7 @@
   .alert-source { color: var(--muted); font-size: 0.75rem; }
   .alert-text { color: var(--text); margin-top: 0.25rem; }
   .alert-item.strike { border-left-color: var(--danger); }
-  .alert-item.strike::before { content: 'â© '; color: var(--danger); font-weight: 700; }
+  .alert-item.strike::before { content: '⚩ '; color: var(--danger); font-weight: 700; }
 
   .replay-btn { background: rgba(56,189,248,0.15); color: var(--accent); border: 1px solid var(--accent); border-radius: 6px; padding: 0.5rem 1rem; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: all 0.2s; margin-top: 1rem; width: 100%; }
   .replay-btn:hover { background: rgba(56,189,248,0.25); }
@@ -240,7 +240,7 @@
 
 <!-- ======================== CONFIG ======================== -->
 <script>
-  // ââ CONFIGURATION ââââââââââââââââââââââââââââââââââââââââââ
+  // ── CONFIGURATION ──────────────────────────────────────────
   // To connect live AIS data via Google Sheets, set LIVE_MODE = true
   // and paste your published-CSV URL below. See SETUP.md for details.
   const CONFIG = {
@@ -275,13 +275,13 @@
 
   // Strike paths for replay
   const STRIKE_PATHS = [
-    { name: 'Inland Iran â Near Kharg Island', from: [27.8, 52.5], to: [29.25, 54.0] },
-    { name: 'Central Iran â Gulf shipping lanes', from: [26.5, 54.0], to: [26.7, 56.3] },
+    { name: 'Inland Iran → Near Kharg Island', from: [27.8, 52.5], to: [29.25, 54.0] },
+    { name: 'Central Iran → Gulf shipping lanes', from: [26.5, 54.0], to: [26.7, 56.3] },
   ];
 </script>
 
 <header>
-  <h1>ð¢ï¸ <span>Strait Watch</span></h1>
+  <h1>🛢️ <span>Strait Watch</span></h1>
   <div class="header-meta">
     <span><span class="live-dot"></span> <span id="mode-label">Simulated</span></span>
     <span id="clock"></span>
@@ -290,11 +290,11 @@
 
 <div id="config-banner">
   <span>Mode: <strong id="banner-mode">Simulation</strong></span>
-  <span>Refresh: <strong id="banner-refresh">â</strong></span>
-  <span>Crisis: <strong>USâIran standoff (April 2026)</strong></span>
+  <span>Refresh: <strong id="banner-refresh">—</strong></span>
+  <span>Crisis: <strong>US–Iran standoff (April 2026)</strong></span>
 </div>
 
-<div id="threat-banner">â ï¸ Threat activity reported near key energy/shipping targets (based on public sources).</div>
+<div id="threat-banner">⚠️ Threat activity reported near key energy/shipping targets (based on public sources).</div>
 
 <!-- Trump Countdown Badge -->
 <div style="padding: 1.25rem 2rem;">
@@ -309,22 +309,22 @@
 <div class="kpi-row">
   <div class="kpi blue">
     <div class="kpi-label">Vessels in Transit</div>
-    <div class="kpi-value" id="kpi-transit">â</div>
+    <div class="kpi-value" id="kpi-transit">—</div>
     <div class="kpi-sub">Currently moving through strait</div>
   </div>
   <div class="kpi yellow">
     <div class="kpi-label">Queued / Waiting</div>
-    <div class="kpi-value" id="kpi-queued">â</div>
+    <div class="kpi-value" id="kpi-queued">—</div>
     <div class="kpi-sub">Anchored near approaches</div>
   </div>
   <div class="kpi red">
     <div class="kpi-label">Avg Wait (hrs)</div>
-    <div class="kpi-value" id="kpi-wait">â</div>
+    <div class="kpi-value" id="kpi-wait">—</div>
     <div class="kpi-sub">Mean anchor time before transit</div>
   </div>
   <div class="kpi green">
     <div class="kpi-label">24h Throughput</div>
-    <div class="kpi-value" id="kpi-throughput">â</div>
+    <div class="kpi-value" id="kpi-throughput">—</div>
     <div class="kpi-sub">Vessels cleared last 24 hrs</div>
   </div>
 </div>
@@ -332,17 +332,17 @@
 <!-- Map + Chart + Days Until Dark -->
 <div class="main-grid">
   <div class="panel">
-    <div class="panel-title">ð Live Vessel Map â Strait of Hormuz</div>
+    <div class="panel-title">📍 Live Vessel Map — Strait of Hormuz</div>
     <div id="map"></div>
   </div>
   <div class="panel">
-    <div class="panel-title">ð 24-Hour Transit Volume</div>
+    <div class="panel-title">📊 24-Hour Transit Volume</div>
     <div id="chart-wrap"><canvas id="transitChart"></canvas></div>
   </div>
 
   <!-- Days Until Dark -->
   <div class="panel days-card">
-    <div class="panel-title">â½ Days Until Dark</div>
+    <div class="panel-title">⛽ Days Until Dark</div>
     <div style="padding: 0.75rem 1rem; border-bottom: 1px solid var(--border);">
       <div class="days-card-subtitle">Estimated days of oil cover if the Strait of Hormuz stays at current disruption levels.</div>
     </div>
@@ -394,7 +394,7 @@
 
   <!-- Strike & Threat Alerts + Replay -->
   <div class="panel alerts-card">
-    <div class="panel-title">ð¨ Strike & Threat Alerts (OSINT)</div>
+    <div class="panel-title">🚨 Strike & Threat Alerts (OSINT)</div>
     <div class="alerts-content">
       <div class="threat-level">
         <span class="threat-label">Threat Level:</span>
@@ -402,13 +402,13 @@
         <span id="threat-label-text" style="color: var(--ok); font-size: 0.8rem; font-weight: 600;"></span>
       </div>
       <div class="alerts-list" id="alerts-list"></div>
-      <button class="replay-btn" id="replay-btn">â¶ Replay last strike</button>
+      <button class="replay-btn" id="replay-btn">▶ Replay last strike</button>
     </div>
   </div>
 
   <!-- Vessel Table -->
   <div class="panel table-wrap">
-    <div class="panel-title">ð¢ Vessel Register</div>
+    <div class="panel-title">🚢 Vessel Register</div>
     <div class="scroll-table">
       <table>
         <thead>
@@ -421,23 +421,23 @@
 </div>
 
 <footer>
-  Built by <a href="https://github.com/xadon108/strait-watch" target="_blank" rel="noopener">Strait Watch</a> Â· Data simulated unless connected to AIS feed Â· <a href="https://github.com/xadon108/strait-watch" id="gh-link" target="_blank" rel="noopener">GitHub</a>
+  Built by <a href="https://github.com/xadon108/strait-watch" target="_blank" rel="noopener">Strait Watch</a> · Data simulated unless connected to AIS feed · <a href="https://github.com/xadon108/strait-watch" id="gh-link" target="_blank" rel="noopener">GitHub</a>
 </footer>
 
 <!-- Support Bar -->
 <div class="support-bar">
-  <a class="support-btn" href="https://ko-fi.com/hormuzpulse" target="_blank" rel="noopener">â Support</a>
-  <a class="support-btn" href="https://hormuzpulse.substack.com" target="_blank" rel="noopener">ð§ Alerts</a>
+  <a class="support-btn" href="https://ko-fi.com/hormuzpulse" target="_blank" rel="noopener">☕ Support</a>
+  <a class="support-btn" href="https://hormuzpulse.substack.com" target="_blank" rel="noopener">📧 Alerts</a>
 </div>
 
 <!-- ======================== APP LOGIC ======================== -->
 <script>
 (function(){
-  // ââ Helpers ââ
+  // ── Helpers ──
   const $ = s => document.querySelector(s);
   const now = () => new Date();
 
-  // ââ Deadline Countdown ââ
+  // ── Deadline Countdown ──
   function updateDeadline(){
     const deadlineDate = new Date('2026-04-06T20:00:00-04:00');
     const diff = deadlineDate - now();
@@ -461,7 +461,7 @@
       badge.classList.remove('passed');
     } else {
       timeEl.textContent = '--:--:--';
-      statusEl.textContent = 'Trump deadline passed â monitoring for follow-up actions.';
+      statusEl.textContent = 'Trump deadline passed – monitoring for follow-up actions.';
       badge.classList.add('passed');
     }
   }
@@ -475,8 +475,8 @@
   tick();
   setInterval(tick, 1000);
 
-  // ââ Simulated Vessel Data ââ
-  const FLAGS = ['ð¸ð¦ SAU','ð®ð· IRN','ð¦ðª UAE','ð°ð¼ KWT','ð®ð¶ IRQ','ð¶ð¦ QAT','ð®ð³ IND','ð¨ð³ CHN','ð¬ð· GRC','ð¯ðµ JPN','ð°ð· KOR','ð³ð´ NOR','ð±ð· LBR','ð²ð­ MHL','ðµð¦ PAN'];
+  // ── Simulated Vessel Data ──
+  const FLAGS = ['🇸🇦 SAU','🇮🇷 IRN','🇦🇪 UAE','🇰🇼 KWT','🇮🇶 IRQ','🇶🇦 QAT','🇮🇳 IND','🇨🇳 CHN','🇬🇷 GRC','🇯🇵 JPN','🇰🇷 KOR','🇳🇴 NOR','🇱🇷 LBR','🇲🇭 MHL','🇵🇦 PAN'];
   const TYPES = ['VLCC','Suezmax','Aframax','LNG Carrier','Product Tanker'];
   const STATUSES = ['transit','queued','anchored','cleared'];
   const NAMES = [
@@ -515,7 +515,7 @@
     return vessels;
   }
 
-  // ââ Live Data Fetcher ââ
+  // ── Live Data Fetcher ──
   async function fetchLiveData(){
     if(!CONFIG.SHEET_CSV_URL) return null;
     try {
@@ -529,31 +529,31 @@
         headers.forEach((h,i) => obj[h] = (cols[i]||'').trim());
         return {
           name: obj.name || obj.vessel || 'Unknown',
-          imo: obj.imo || 'â',
-          flag: obj.flag || 'â',
+          imo: obj.imo || '—',
+          flag: obj.flag || '—',
           type: obj.type || 'Tanker',
           status: (obj.status||'transit').toLowerCase(),
           speed: parseFloat(obj.speed)||0,
           heading: parseInt(obj.heading)||0,
           lat: parseFloat(obj.lat)||26.2,
           lng: parseFloat(obj.lng)||56.2,
-          lastSeen: obj.lastseen || obj.last_seen || obj.timestamp || 'â',
+          lastSeen: obj.lastseen || obj.last_seen || obj.timestamp || '—',
         };
       });
     } catch(e) { console.warn('CSV fetch failed, falling back to simulation', e); return null; }
   }
 
-  // ââ Map Setup ââ
+  // ── Map Setup ──
   const map = L.map('map',{zoomControl:false}).setView([26.35, 56.25], 9);
   L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{
-    attribution:'Â© OpenStreetMap Â© CARTO', maxZoom:18
+    attribution:'© OpenStreetMap © CARTO', maxZoom:18
   }).addTo(map);
   L.control.zoom({position:'bottomright'}).addTo(map);
 
   // Strait polygon highlight
   L.polygon([
     [26.6,56.0],[26.7,56.5],[26.4,56.7],[26.0,56.5],[26.1,56.0]
-  ],{color:'#38bdf8',weight:1,fillOpacity:0.06,dashArray:'6 4'}).addTo(map).bindPopup('Strait of Hormuz â Transit Zone');
+  ],{color:'#38bdf8',weight:1,fillOpacity:0.06,dashArray:'6 4'}).addTo(map).bindPopup('Strait of Hormuz — Transit Zone');
 
   // Strike replay path polyline (not visible by default)
   let strikePolyline = null;
@@ -569,13 +569,13 @@
     vessels.forEach(v=>{
       const c = statusColor(v.status);
       const m = L.circleMarker([v.lat,v.lng],{radius:5,color:c,fillColor:c,fillOpacity:0.8,weight:1})
-        .bindPopup(`<b>${v.name}</b><br>${v.flag} Â· ${v.type}<br>Status: ${v.status}<br>Speed: ${v.speed} kn`)
+        .bindPopup(`<b>${v.name}</b><br>${v.flag} · ${v.type}<br>Status: ${v.status}<br>Speed: ${v.speed} kn`)
         .addTo(map);
       markers.push(m);
     });
   }
 
-  // ââ Chart Setup ââ
+  // ── Chart Setup ──
   const ctx = $('#transitChart').getContext('2d');
   const chartLabels = Array.from({length:24},(_,i)=>`${String(i).padStart(2,'0')}:00`);
   const chart = new Chart(ctx,{
@@ -600,7 +600,7 @@
     }
   });
 
-  // ââ Days Until Dark Logic ââ
+  // ── Days Until Dark Logic ──
   let globalThroughput = 1.0; // Simulate disruption factor
 
   function updateDaysUntilDark(){
@@ -638,9 +638,9 @@
       const row = document.createElement('tr');
       if(isCritical) row.classList.add('critical');
       row.innerHTML = `
-        <td><strong>${cname}${isSelected ? ' â' : ''}</strong></td>
+        <td><strong>${cname}${isSelected ? ' ✓' : ''}</strong></td>
         <td>${cdays.toFixed(1)}</td>
-        <td><span class="status-dot ${statusClass}"></span>${cdays < 5 ? 'â ' : ''}</td>
+        <td><span class="status-dot ${statusClass}"></span>${cdays < 5 ? '⚠' : ''}</td>
       `;
       tbody.appendChild(row);
     });
@@ -648,7 +648,7 @@
 
   $('#country-select').addEventListener('change', updateDaysUntilDark);
 
-  // ââ Threat Alerts Logic ââ
+  // ── Threat Alerts Logic ──
   let currentAlerts = [];
   let lastStrikeIdx = -1;
 
@@ -705,14 +705,14 @@
       div.className = `alert-item ${isStrike ? 'strike' : ''}`;
       div.innerHTML = `
         <div class="alert-time">${alert.time}</div>
-        <div class="alert-source">â ${alert.source}</div>
+        <div class="alert-source">– ${alert.source}</div>
         <div class="alert-text">${alert.text}</div>
       `;
       alertsList.appendChild(div);
     });
   }
 
-  // ââ Strike Replay ââ
+  // ── Strike Replay ──
   $('#replay-btn').addEventListener('click', function(){
     if(lastStrikeIdx === -1){
       lastStrikeIdx = 0;
@@ -801,7 +801,7 @@
     animate();
   });
 
-  // ââ Render ââ
+  // ── Render ──
   function render(vessels){
     const transit = vessels.filter(v=>v.status==='transit').length;
     const queued  = vessels.filter(v=>v.status==='queued').length;
@@ -831,7 +831,7 @@
         <td>${v.type}</td>
         <td><span class="badge ${badgeClass}">${v.status}</span></td>
         <td>${v.speed}</td>
-        <td>${v.heading}Â°</td>
+        <td>${v.heading}°</td>
         <td>${v.lastSeen}</td>
       </tr>`;
     });
@@ -843,7 +843,7 @@
     chart.update('none');
   }
 
-  // ââ Main Loop ââ
+  // ── Main Loop ──
   async function update(){
     let vessels;
     if(CONFIG.LIVE_MODE && CONFIG.SHEET_CSV_URL){
