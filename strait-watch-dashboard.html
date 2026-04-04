@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Strait Watch — Live Hormuz Tanker Tracker</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #0b1120; --card: #131b2e; --accent: #38bdf8; --danger: #ef4444;
+    --warn: #f59e0b; --ok: #22c55e; --text: #e2e8f0; --muted: #94a3b8;
+    --border: #1e293b;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); min-height:100vh; }
+  header { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border-bottom: 1px solid var(--border); padding: 1rem 2rem; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.5rem; }
+  header h1 { font-size:1.5rem; font-weight:700; }
+  header h1 span { color: var(--accent); }
+  .header-meta { display:flex; gap:1.5rem; align-items:center; font-size:0.85rem; color:var(--muted); }
+  .live-dot { width:8px; height:8px; border-radius:50%; background:var(--ok); display:inline-block; animation: pulse 2s infinite; margin-right:4px; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  #config-banner { background: #1e293b; padding: 0.5rem 2rem; font-size: 0.8rem; color: var(--muted); border-bottom: 1px solid var(--border); display: flex; gap: 2rem; }
+  .kpi-row { display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:1rem; padding:1.25rem 2rem; }
+  .kpi { background: var(--card); border:1px solid var(--border); border-radius:12px; padding:1.25rem; position:relative; overflow:hidden; }
+  .kpi::before { content:''; position:absolute; top:0; left:0; width:4px; height:100%; }
+  .kpi.blue::before { background: var(--accent); }
+  .kpi.red::before { background: var(--danger); }
+  .kpi.yellow::before { background: var(--warn); }
+  .kpi.green::before { background: var(--ok); }
+  .kpi-label { font-size:0.75rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--muted); margin-bottom:0.35rem; }
+  .kpi-value { font-size:2rem; font-weight:700; line-height:1.1; }
+  .kpi-sub { font-size:0.8rem; color:var(--muted); margin-top:0.25rem; }
+  .kpi.blue .kpi-value { color: var(--accent); }
+  .kpi.red .kpi-value { color: var(--danger); }
+  .kpi.yellow .kpi-value { color: var(--warn); }
+  .kpi.green .kpi-value { color: var(--ok); }
+  .main-grid { display:grid; grid-template-columns: 1fr 1fr; gap:1rem; padding:0 2rem 1.25rem; }
+  @media (max-width:900px) { .main-grid { grid-template-columns:1fr; } }
+  .panel { background: var(--card); border:1px solid var(--border); border-radius:12px; overflow:hidden; }
+  .panel-title { font-size:0.85rem; font-weight:600; padding:0.75rem 1rem; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:0.5rem; }
+  #map { height: 350px; width:100%; }
+  #chart-wrap { padding: 0.75rem 1rem; height: 320px; }
+  .table-wrap { grid-column: 1 / -1; }
+  table { width:100%; border-collapse:collapse; font-size:0.82rem; }
+  th { background:#1a2235; text-align:left; padding:0.6rem 0.75rem; color:var(--muted); text-transform:uppercase; font-size:0.7rem; letter-spacing:0.04em; position:sticky; top:0; }
+  td { padding:0.55rem 0.75rem; border-bottom:1px solid var(--border); }
+  tr:hover td { background: #1a2235; }
+  .badge { display:inline-block; padding:2px 8px; border-radius:99px; font-size:0.7rem; font-weight:600; }
+  .badge-transit { background:rgba(56,189,248,0.15); color:var(--accent); }
+  .badge-queued { background:rgba(245,158,11,0.15); color:var(--warn); }
+  .badge-anchored { background:rgba(239,68,68,0.15); color:var(--danger); }
+  .badge-cleared { background:rgba(34,197,94,0.15); color:var(--ok); }
+  .scroll-table { max-height:340px; overflow-y:auto; }
+  footer { text-align:center; padding:1.5rem; font-size:0.75rem; color:var(--muted); border-top:1px solid var(--border); }
+  footer a { color: var(--accent); text-decoration:none; }
+</style>
+</head>
+<body>
+<script>
+  const CONFIG = {
+    LIVE_MODE:     false,
+    SHEET_CSV_URL: '',
+    REFRESH_MS:    300000,
+    DEADLINE:      '2026-04-06T23:59:59Z',
+  };
+</script>
+
+<header>
+  <h1>🛢️ <span>Strait Watch</span> — Hormuz Tanker Tracker</h1>
+  <div class="header-meta">
+    <span><span class="live-dot"></span> <span id="mode-label">Simulated</span></span>
+    <span id="clock"></span>
+    <span id="countdown"></span>
+  </div>
+</header>
+
+<div id="config-banner">
+  <span>Mode: <strong id="banner-mode">Simulation</strong></span>
+  <span>Refresh: <strong id="banner-refresh">—</strong></span>
+  <span>Deadline: <strong>6 Apr 2026</strong></span>
+</div>
+
+<div class="kpi-row">
+  <div class="kpi blue">
+    <div class="kpi-label">Vessels in Transit</div>
+    <div class="kpi-value" id="kpi-transit">—</div>
+    <div class="kpi-sub">Currently moving through strait</div>
+  </div>
+  <div class="kpi yellow">
+    <div class="kpi-label">Queued / Waiting</div>
+    <div class="kpi-value" id="kpi-queued">—</div>
+    <div class="kpi-sub">Anchored near approaches</div>
+  </div>
+  <div class="kpi red">
+    <div class="kpi-label">Avg Wait (hrs)</div>
+    <div class="kpi-value" id="kpi-wait">—</div>
+    <div class="kpi-sub">Mean anchor time before transit</div>
+  </div>
+  <div class="kpi green">
+    <div class="kpi-label">24h Throughput</div>
+    <div class="kpi-value" id="kpi-throughput">—</div>
+    <div class="kpi-sub">Vessels cleared last 24 hrs</div>
+  </div>
+</div>
+
+<div class="main-grid">
+  <div class="panel">
+    <div class="panel-title">📍 Live Vessel Map — Strait of Hormuz</div>
+    <div id="map"></div>
+  </div>
+  <div class="panel">
+    <div class="panel-title">📊 24-Hour Transit Volume</div>
+    <div id="chart-wrap"><canvas id="transitChart"></canvas></div>
+  </div>
+  <div class="panel table-wrap">
+    <div class="panel-title">🚢 Vessel Register</div>
+    <div class="scroll-table">
+      <table>
+        <thead>
+          <tr><th>Vessel Name</th><th>IMO</th><th>Flag</th><th>Type</th><th>Status</th><th>Speed (kn)</th><th>Heading</th><th>Last Seen (UTC)</th></tr>
+        </thead>
+        <tbody id="vessel-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<footer>
+  Built by <a href="#">Strait Watch</a> · Data simulated unless connected to AIS feed · <a href="https://github.com/xadon108/strait-watch" id="gh-link">GitHub</a>
+</footer>
+
+<script>
+(function(){
+  const $ = s => document.querySelector(s);
+  const now = () => new Date();
+
+  function tick(){
+    $('#clock').textContent = now().toUTCString().slice(0,-4)+' UTC';
+    const dl = new Date(CONFIG.DEADLINE) - now();
+    if(dl > 0){
+      const d=Math.floor(dl/864e5), h=Math.floor(dl%864e5/36e5), m=Math.floor(dl%36e5/6e4);
+      $('#countdown').textContent = '⏱ Deadline: '+d+'d '+h+'h '+m+'m';
+    } else {
+      $('#countdown').textContent = '⏱ Deadline passed';
+    }
+  }
+  tick(); setInterval(tick, 30000);
+
+  const FLAGS = ['🇸🇦 SAU','🇮🇷 IRN','🇦🇪 UAE','🇰🇼 KWT','🇮🇶 IRQ','🇶🇦 QAT','🇮🇳 IND','🇨🇳 CHN','🇬🇷 GRC','🇯🇵 JPN','🇰🇷 KOR','🇳🇴 NOR','🇱🇷 LBR','🇲🇭 MHL','🇵🇦 PAN'];
+  const TYPES = ['VLCC','Suezmax','Aframax','LNG Carrier','Product Tanker'];
+  const STATUSES = ['transit','queued','anchored','cleared'];
+  const NAMES = [
+    'Front Endurance','Nissos Rhenia','Al Dafna','Celsius Riga','Eagle Vancouver',
+    'Maran Sagitta','Suez Rajan','DHT Hawk','Gener8 Athena','Hafnia Phoenix',
+    'Kriti Amber','Leon Dias','Nordic Zenith','Olympic Luck','Pacific Voyager',
+    'Qatar Spirit','Ridgebury Pioneer','Stena Sunrise','Torm Alexandra','United Vigor',
+    'Bahri Yanbu','Celsius Tokyo','Desert Falcon','Emirates Glory','Falcon Confidence',
+    'Gulf Coral','Hyundai Prestige','Ionic Artemis','Jag Lakshya','Kapetan Markos',
+    'Lila Mumbai','Minerva Zenia','New Prosperity','Orient Treasure','Pluto Glory',
+    'Reem Star','Sakura Express','Tanker Halo','Umm Lulu','Voyager Dawn',
+  ];
+
+  function rnd(a,b){ return Math.floor(Math.random()*(b-a+1))+a; }
+  function pick(arr){ return arr[rnd(0,arr.length-1)]; }
+
+  function generateVessels(){
+    const n = rnd(28,45);
+    const vessels = [];
+    for(let i=0;i<n;i++){
+      const status = pick(STATUSES);
+      const lat = 26.2 + (Math.random()-0.5)*0.8;
+      const lng = 56.2 + (Math.random()-0.5)*0.9;
+      vessels.push({
+        name: NAMES[i % NAMES.length] + (i>=NAMES.length ? ' II':''),
+        imo: 9000000 + rnd(100000,999999),
+        flag: pick(FLAGS),
+        type: pick(TYPES),
+        status,
+        speed: status==='transit' ? rnd(8,14) : status==='cleared' ? rnd(10,16) : rnd(0,2),
+        heading: rnd(0,359),
+        lat, lng,
+        lastSeen: new Date(Date.now() - rnd(0, 7200000)).toISOString().slice(0,16).replace('T',' ')+' UTC',
+      });
+    }
+    return vessels;
+  }
+
+  async function fetchLiveData(){
+    if(!CONFIG.SHEET_CSV_URL) return null;
+    try {
+      const res = await fetch(CONFIG.SHEET_CSV_URL);
+      const text = await res.text();
+      const lines = text.trim().split('\n');
+      const headers = lines[0].split(',').map(h=>h.trim().toLowerCase());
+      return lines.slice(1).map(line => {
+        const cols = line.split(',');
+        const obj = {};
+        headers.forEach((h,i) => obj[h] = (cols[i]||'').trim());
+        return {
+          name: obj.name || obj.vessel || 'Unknown',
+          imo: obj.imo || '—', flag: obj.flag || '—',
+          type: obj.type || 'Tanker',
+          status: (obj.status||'transit').toLowerCase(),
+          speed: parseFloat(obj.speed)||0, heading: parseInt(obj.heading)||0,
+          lat: parseFloat(obj.lat)||26.2, lng: parseFloat(obj.lng)||56.2,
+          lastSeen: obj.lastseen || obj.last_seen || obj.timestamp || '—',
+        };
+      });
+    } catch(e) { console.warn('CSV fetch failed', e); return null; }
+  }
+
+  const map = L.map('map',{zoomControl:false}).setView([26.35, 56.25], 9);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{
+    attribution:'© OpenStreetMap © CARTO', maxZoom:18
+  }).addTo(map);
+  L.control.zoom({position:'bottomright'}).addTo(map);
+  L.polygon([[26.6,56.0],[26.7,56.5],[26.4,56.7],[26.0,56.5],[26.1,56.0]],
+    {color:'#38bdf8',weight:1,fillOpacity:0.06,dashArray:'6 4'}).addTo(map).bindPopup('Strait of Hormuz — Transit Zone');
+
+  let markers = [];
+  function statusColor(s){ return s==='transit'?'#38bdf8':s==='queued'?'#f59e0b':s==='anchored'?'#ef4444':'#22c55e'; }
+
+  function plotVessels(vessels){
+    markers.forEach(m=>map.removeLayer(m)); markers=[];
+    vessels.forEach(v=>{
+      const c = statusColor(v.status);
+      markers.push(L.circleMarker([v.lat,v.lng],{radius:5,color:c,fillColor:c,fillOpacity:0.8,weight:1})
+        .bindPopup('<b>'+v.name+'</b><br>'+v.flag+' · '+v.type+'<br>Status: '+v.status+'<br>Speed: '+v.speed+' kn')
+        .addTo(map));
+    });
+  }
+
+  const ctx = $('#transitChart').getContext('2d');
+  const chartLabels = Array.from({length:24},(_,i)=>(String(i).padStart(2,'0'))+':00');
+  const chart = new Chart(ctx,{
+    type:'bar',
+    data:{ labels: chartLabels, datasets:[{ label:'Transits', data: chartLabels.map(()=>rnd(1,6)),
+      backgroundColor:'rgba(56,189,248,0.5)', borderColor:'#38bdf8', borderWidth:1, borderRadius:4 }] },
+    options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{display:false} },
+      scales:{ x:{ ticks:{color:'#94a3b8',font:{size:10}}, grid:{color:'#1e293b'} },
+        y:{ ticks:{color:'#94a3b8'}, grid:{color:'#1e293b'}, beginAtZero:true } } }
+  });
+
+  function render(vessels){
+    const transit=vessels.filter(v=>v.status==='transit').length;
+    const queued=vessels.filter(v=>v.status==='queued').length;
+    const anchored=vessels.filter(v=>v.status==='anchored').length;
+    const cleared=vessels.filter(v=>v.status==='cleared').length;
+    $('#kpi-transit').textContent=transit;
+    $('#kpi-queued').textContent=queued+anchored;
+    $('#kpi-wait').textContent=(rnd(4,18)+Math.random()).toFixed(1);
+    $('#kpi-throughput').textContent=cleared;
+    const tbody=$('#vessel-tbody'); tbody.innerHTML='';
+    vessels.sort((a,b)=>STATUSES.indexOf(a.status)-STATUSES.indexOf(b.status)).forEach(v=>{
+      tbody.innerHTML+='<tr><td><strong>'+v.name+'</strong></td><td>'+v.imo+'</td><td>'+v.flag+'</td><td>'+v.type+'</td><td><span class="badge badge-'+v.status+'">'+v.status+'</span></td><td>'+v.speed+'</td><td>'+v.heading+'°</td><td>'+v.lastSeen+'</td></tr>';
+    });
+    plotVessels(vessels);
+    chart.data.datasets[0].data=chartLabels.map(()=>rnd(1,7));
+    chart.update('none');
+  }
+
+  async function update(){
+    let vessels;
+    if(CONFIG.LIVE_MODE && CONFIG.SHEET_CSV_URL){
+      vessels = await fetchLiveData();
+      if(vessels){ $('#mode-label').textContent='Live AIS'; $('#banner-mode').textContent='Live (Google Sheet)'; }
+    }
+    if(!vessels){ vessels=generateVessels(); $('#mode-label').textContent='Simulated'; $('#banner-mode').textContent='Simulation'; }
+    $('#banner-refresh').textContent=(CONFIG.REFRESH_MS/1000)+'s';
+    render(vessels);
+  }
+  update(); setInterval(update, CONFIG.REFRESH_MS);
+})();
+</script>
+</body>
+</html>
