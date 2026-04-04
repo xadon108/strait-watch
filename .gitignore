@@ -1,0 +1,18 @@
+# Private files
+MONETISE.md
+CLAUDE-INSTRUCTIONS.txt
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# Node
+node_modules/
+package-lock.json
