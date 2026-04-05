@@ -1,33 +1,5 @@
 {
-  "updated": "2026-04-05T17:00:00Z",
+  "updated": "2026-04-05T19:08:36.753662+00:00",
   "source": "AISstream.io via GitHub Actions",
-  "vessels": [
-    {"imo":9321483,"name":"FRONT ENDURANCE","flag":"NO","type":"VLCC","status":"transit","speed":13.2,"heading":310,"lat":26.21,"lng":56.88,"last_seen":"2026-04-05 17:01 UTC"},
-    {"imo":9376510,"name":"NISSOS RHENIA","flag":"GR","type":"Tanker","status":"transit","speed":12.1,"heading":128,"lat":25.74,"lng":57.43,"last_seen":"2026-04-05 17:03 UTC"},
-    {"imo":9388768,"name":"AL DAFNA","flag":"QA","type":"LNG Tanker","status":"transit","speed":14.4,"heading":309,"lat":26.48,"lng":56.52,"last_seen":"2026-04-05 17:02 UTC"},
-    {"imo":9484652,"name":"EAGLE VANCOUVER","flag":"MH","type":"Tanker","status":"transit","speed":11.8,"heading":132,"lat":25.91,"lng":57.21,"last_seen":"2026-04-05 16:58 UTC"},
-    {"imo":9294398,"name":"DHT HAWK","flag":"NO","type":"VLCC","status":"transit","speed":12.9,"heading":312,"lat":26.35,"lng":56.71,"last_seen":"2026-04-05 17:04 UTC"},
-    {"imo":9563818,"name":"STENA SUNRISE","flag":"SE","type":"Tanker","status":"transit","speed":13.5,"heading":127,"lat":26.02,"lng":57.09,"last_seen":"2026-04-05 16:55 UTC"},
-    {"imo":9624168,"name":"GULF CORAL","flag":"AE","type":"Tanker","status":"transit","speed":10.2,"heading":308,"lat":26.58,"lng":56.34,"last_seen":"2026-04-05 17:00 UTC"},
-    {"imo":9319465,"name":"BAHRI YANBU","flag":"SA","type":"VLCC","status":"transit","speed":12.7,"heading":130,"lat":25.62,"lng":57.61,"last_seen":"2026-04-05 16:52 UTC"},
-    {"imo":9400218,"name":"QATAR SPIRIT","flag":"QA","type":"LNG Tanker","status":"queued","speed":0.4,"heading":270,"lat":27.12,"lng":56.22,"last_seen":"2026-04-05 16:48 UTC"},
-    {"imo":9512088,"name":"MARAN SAGITTA","flag":"GR","type":"VLCC","status":"queued","speed":0.8,"heading":285,"lat":27.31,"lng":55.98,"last_seen":"2026-04-05 16:44 UTC"},
-    {"imo":9623941,"name":"NORDIC ZENITH","flag":"NO","type":"Tanker","status":"queued","speed":0.3,"heading":260,"lat":27.04,"lng":56.45,"last_seen":"2026-04-05 17:01 UTC"},
-    {"imo":9488088,"name":"CELSIUS RIGA","flag":"MH","type":"Tanker","status":"queued","speed":0.6,"heading":275,"lat":27.19,"lng":56.08,"last_seen":"2026-04-05 16:39 UTC"},
-    {"imo":9287030,"name":"KRITI AMBER","flag":"GR","type":"VLCC","status":"queued","speed":0.2,"heading":290,"lat":27.41,"lng":55.87,"last_seen":"2026-04-05 16:55 UTC"},
-    {"imo":9377378,"name":"DESERT FALCON","flag":"AE","type":"Tanker","status":"queued","speed":0.7,"heading":268,"lat":27.08,"lng":56.31,"last_seen":"2026-04-05 16:50 UTC"},
-    {"imo":9408908,"name":"HAFNIA PHOENIX","flag":"DK","type":"Tanker","status":"queued","speed":0.4,"heading":280,"lat":27.26,"lng":56.14,"last_seen":"2026-04-05 16:47 UTC"},
-    {"imo":9529568,"name":"PACIFIC JEWEL","flag":"MH","type":"VLCC","status":"queued","speed":0.3,"heading":265,"lat":27.38,"lng":55.76,"last_seen":"2026-04-05 16:53 UTC"},
-    {"imo":9298958,"name":"ENERGY CENTURION","flag":"GR","type":"Tanker","status":"queued","speed":0.5,"heading":272,"lat":27.15,"lng":56.05,"last_seen":"2026-04-05 16:43 UTC"},
-    {"imo":9339288,"name":"OMAN QALHAT","flag":"OM","type":"LNG Tanker","status":"queued","speed":0.1,"heading":288,"lat":27.33,"lng":55.91,"last_seen":"2026-04-05 17:02 UTC"},
-    {"imo":9381590,"name":"ALTA MIRA","flag":"LR","type":"Tanker","status":"anchored","speed":0.0,"heading":185,"lat":27.48,"lng":55.68,"last_seen":"2026-04-05 16:38 UTC"},
-    {"imo":9422108,"name":"LION SPIRIT","flag":"GR","type":"VLCC","status":"anchored","speed":0.0,"heading":210,"lat":27.52,"lng":55.79,"last_seen":"2026-04-05 16:31 UTC"},
-    {"imo":9553781,"name":"INCA","flag":"LR","type":"Tanker","status":"anchored","speed":0.0,"heading":195,"lat":27.44,"lng":55.61,"last_seen":"2026-04-05 16:22 UTC"},
-    {"imo":9418758,"name":"AMOUREUX","flag":"LR","type":"VLCC","status":"anchored","speed":0.0,"heading":202,"lat":27.56,"lng":55.84,"last_seen":"2026-04-05 16:19 UTC"},
-    {"imo":9359837,"name":"OLYMPIA I","flag":"GR","type":"Tanker","status":"cleared","speed":15.1,"heading":130,"lat":24.82,"lng":58.12,"last_seen":"2026-04-05 16:28 UTC"},
-    {"imo":9387050,"name":"ENDEAVOUR","flag":"MH","type":"Tanker","status":"cleared","speed":14.3,"heading":135,"lat":24.61,"lng":58.44,"last_seen":"2026-04-05 16:14 UTC"},
-    {"imo":9302607,"name":"GEMINI SUN","flag":"GR","type":"VLCC","status":"cleared","speed":13.8,"heading":128,"lat":24.71,"lng":58.31,"last_seen":"2026-04-05 16:45 UTC"},
-    {"imo":9465428,"name":"ALPINE ETERNITY","flag":"LR","type":"Tanker","status":"cleared","speed":14.9,"heading":133,"lat":24.55,"lng":58.58,"last_seen":"2026-04-05 16:35 UTC"},
-    {"imo":9551608,"name":"SPRING ODYSSEY","flag":"MH","type":"Tanker","status":"cleared","speed":13.5,"heading":140,"lat":24.88,"lng":57.98,"last_seen":"2026-04-05 16:52 UTC"}
-  ]
+  "vessels": []
 }
