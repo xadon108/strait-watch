@@ -1,0 +1,38 @@
+name: Update Vessel Data
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install websockets
+
+      - name: Fetch AIS data
+        run: python scripts/fetch_ais.py
+        env:
+          AIS_KEY: ${{ secrets.AIS_KEY }}
+
+      - name: Commit vessel data
+        run: |
+          git config user.name  "Strait Watch Bot"
+          git config user.email "bot@strait-watch.github"
+          git add data/vessels.json
+          git diff --cached --quiet && exit 0
+          git commit -m "📡 vessel data $(date -u '+%H:%M UTC')"
+          git push
