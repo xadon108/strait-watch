@@ -24,42 +24,82 @@
   .live-dot { width:8px; height:8px; border-radius:50%; background:var(--ok); display:inline-block; animation: pulse 2s infinite; margin-right:4px; }
   @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
+  /* COUNTDOWN BANNER */
+  #countdown-banner {
+    background: linear-gradient(90deg, #1a0000 0%, #2d0a0a 50%, #1a0000 100%);
+    border-bottom: 2px solid var(--danger);
+    padding: 1rem 2rem;
+    text-align: center;
+  }
+  #countdown-banner .cd-label {
+    font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.15em;
+    color: #f87171; margin-bottom: 0.3rem; font-weight: 600;
+  }
+  #countdown-banner .cd-timer {
+    font-size: 2.2rem; font-weight: 800; font-variant-numeric: tabular-nums;
+    color: #fca5a5; letter-spacing: 0.04em;
+  }
+  #countdown-banner .cd-timer b { color: #ef4444; }
+  #countdown-banner.urgent .cd-timer { animation: urgentPulse 1s infinite; }
+  @keyframes urgentPulse { 0%,100%{opacity:1} 50%{opacity:0.6} }
+
   /* Config banner */
-  #config-banner { background: #1e293b; padding: 0.5rem 2rem; font-size: 0.8rem; color: var(--muted); border-bottom: 1px solid var(--border); display: flex; gap: 2rem; }
+  #config-banner { background: #1e293b; padding: 0.5rem 2rem; font-size: 0.8rem; color: var(--muted); border-bottom: 1px solid var(--border); display: flex; gap: 2rem; flex-wrap: wrap; }
 
   /* KPI row */
-  .kpi-row { display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:1rem; padding:1.25rem 2rem; }
-  .kpi { background: var(--card); border:1px solid var(--border); border-radius:12px; padding:1.25rem; position:relative; overflow:hidden; }
+  .kpi-row { display:grid; grid-template-columns: repeat(4, 1fr); gap:1rem; padding:1.25rem 2rem; }
+  @media (max-width:900px) { .kpi-row { grid-template-columns: repeat(2, 1fr); } }
+  .kpi { background: var(--card); border:1px solid var(--border); border-radius:12px; padding:1.25rem; position:relative; overflow:hidden; transition: transform 0.2s, box-shadow 0.2s; }
+  .kpi:hover { transform: translateY(-2px); box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
   .kpi::before { content:''; position:absolute; top:0; left:0; width:4px; height:100%; }
   .kpi.blue::before { background: var(--accent); }
   .kpi.red::before { background: var(--danger); }
   .kpi.yellow::before { background: var(--warn); }
   .kpi.green::before { background: var(--ok); }
   .kpi-label { font-size:0.75rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--muted); margin-bottom:0.35rem; }
-  .kpi-value { font-size:2rem; font-weight:700; line-height:1.1; }
+  .kpi-value { font-size:2rem; font-weight:700; line-height:1.1; transition: color 0.3s; }
   .kpi-sub { font-size:0.8rem; color:var(--muted); margin-top:0.25rem; }
   .kpi.blue .kpi-value { color: var(--accent); }
   .kpi.red .kpi-value { color: var(--danger); }
   .kpi.yellow .kpi-value { color: var(--warn); }
   .kpi.green .kpi-value { color: var(--ok); }
 
+  /* Secondary stats row */
+  .stats-secondary { display:flex; gap:2rem; padding:0 2rem 1rem; flex-wrap:wrap; }
+  .stat-mini { font-size:0.8rem; color:var(--muted); }
+  .stat-mini strong { color:var(--text); margin-left:0.3rem; }
+
+  /* Traffic light */
+  .traffic-light { display:inline-flex; align-items:center; gap:0.4rem; margin-left:auto; }
+  .tl-dot { width:14px; height:14px; border-radius:50%; border:2px solid rgba(255,255,255,0.15); opacity:0.25; }
+  .tl-dot.active { opacity:1; box-shadow: 0 0 8px currentColor; }
+  .tl-green { color: var(--ok); background: var(--ok); }
+  .tl-yellow { color: var(--warn); background: var(--warn); }
+  .tl-red { color: var(--danger); background: var(--danger); }
+
   /* Layout grid */
   .main-grid { display:grid; grid-template-columns: 1fr 1fr; gap:1rem; padding:0 2rem 1.25rem; }
   @media (max-width:900px) { .main-grid { grid-template-columns:1fr; } }
-
   .panel { background: var(--card); border:1px solid var(--border); border-radius:12px; overflow:hidden; }
   .panel-title { font-size:0.85rem; font-weight:600; padding:0.75rem 1rem; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:0.5rem; }
 
   /* Map */
-  #map { height: 350px; width:100%; }
+  #map { height: 380px; width:100%; }
+  .vessel-popup { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 13px; line-height: 1.5; color: #1e293b; }
+  .vessel-popup img { width:200px; height:120px; object-fit:cover; border-radius:6px; margin-top:6px; display:block; }
+  .vessel-popup .vp-name { font-size:15px; font-weight:700; margin-bottom:4px; }
+  .vessel-popup .vp-row { display:flex; justify-content:space-between; gap:8px; }
+  .vessel-popup .vp-label { color:#64748b; }
+  .vessel-popup .vp-link { display:inline-block; margin-top:6px; color:#2563eb; font-size:12px; text-decoration:none; }
+  .vessel-popup .vp-link:hover { text-decoration:underline; }
 
   /* Chart */
-  #chart-wrap { padding: 0.75rem 1rem; height: 320px; }
+  #chart-wrap { padding: 0.75rem 1rem; height: 340px; }
 
   /* Table */
   .table-wrap { grid-column: 1 / -1; }
   table { width:100%; border-collapse:collapse; font-size:0.82rem; }
-  th { background:#1a2235; text-align:left; padding:0.6rem 0.75rem; color:var(--muted); text-transform:uppercase; font-size:0.7rem; letter-spacing:0.04em; position:sticky; top:0; }
+  th { background:#1a2235; text-align:left; padding:0.6rem 0.75rem; color:var(--muted); text-transform:uppercase; font-size:0.7rem; letter-spacing:0.04em; position:sticky; top:0; z-index:2; }
   td { padding:0.55rem 0.75rem; border-bottom:1px solid var(--border); }
   tr:hover td { background: #1a2235; }
   .badge { display:inline-block; padding:2px 8px; border-radius:99px; font-size:0.7rem; font-weight:600; }
@@ -67,7 +107,33 @@
   .badge-queued { background:rgba(245,158,11,0.15); color:var(--warn); }
   .badge-anchored { background:rgba(239,68,68,0.15); color:var(--danger); }
   .badge-cleared { background:rgba(34,197,94,0.15); color:var(--ok); }
-  .scroll-table { max-height:340px; overflow-y:auto; }
+  .scroll-table { max-height:400px; overflow-y:auto; }
+
+  /* ── DAYS UNTIL DARK panel ── */
+  .dark-panel { grid-column: 1 / -1; }
+  .dark-panel .panel-title { color: #fca5a5; }
+  .dark-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap:0.75rem; padding:1rem; }
+  .dark-row {
+    background: rgba(15,23,42,0.6); border:1px solid var(--border); border-radius:10px;
+    padding:0.85rem 1rem; display:flex; align-items:center; gap:0.75rem;
+    transition: border-color 0.3s;
+  }
+  .dark-row.warn-amber { border-color: var(--warn); }
+  .dark-row.warn-red { border-color: var(--danger); background: rgba(239,68,68,0.05); }
+  .dark-flag { font-size:1.6rem; flex-shrink:0; }
+  .dark-info { flex:1; }
+  .dark-country { font-size:0.85rem; font-weight:600; }
+  .dark-days { font-size:1.5rem; font-weight:800; line-height:1.1; }
+  .dark-days.amber { color: var(--warn); }
+  .dark-days.red { color: var(--danger); }
+  .dark-days.ok { color: var(--ok); }
+  .dark-base { font-size:0.7rem; color:var(--muted); }
+  .dark-bar-wrap { width:100%; height:8px; background:#1e293b; border-radius:99px; overflow:hidden; margin-top:4px; }
+  .dark-bar { height:100%; border-radius:99px; transition: width 0.5s ease; }
+  .dark-bar.ok { background: var(--ok); }
+  .dark-bar.amber { background: var(--warn); }
+  .dark-bar.red { background: var(--danger); }
+  .dark-warn-icon { font-size:1.2rem; flex-shrink:0; }
 
   /* Action buttons */
   .action-btns { display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap; }
@@ -75,6 +141,9 @@
   .btn-support:hover { opacity:0.85; }
   .btn-alerts { background: rgba(249,115,22,0.15); color:#fb923c; border:1px solid rgba(249,115,22,0.3); border-radius:8px; padding:0.45rem 0.9rem; font-size:0.8rem; font-weight:600; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:0.35rem; transition:background 0.2s; }
   .btn-alerts:hover { background: rgba(249,115,22,0.25); }
+
+  /* Animated map dots */
+  @keyframes mapPulse { 0%{r:5;opacity:0.85} 50%{r:7;opacity:0.5} 100%{r:5;opacity:0.85} }
 
   /* Footer */
   footer { text-align:center; padding:1.5rem; font-size:0.75rem; color:var(--muted); border-top:1px solid var(--border); }
@@ -85,87 +154,125 @@
 
 <!-- ======================== CONFIG ======================== -->
 <script>
-  // ── CONFIGURATION ──────────────────────────────────────────
-  // Data is fetched from data/vessels.json, updated every 5 min via GitHub Actions.
-  // GitHub Actions connects server-side to AISstream.io (no CORS restriction).
   const CONFIG = {
     DATA_URL:   'data/vessels.json',
-    REFRESH_MS: 300000,   // re-fetch every 5 minutes (matches GitHub Action schedule)
+    REFRESH_MS: 300000,
     DEADLINE:   '2026-04-06T23:59:59Z',
+    BRENT_PRICE: 74.82,  // Manually set; update or fetch live later
   };
+
+  // Countries for "Days Until Dark" panel
+  // baseReserve = strategic + commercial reserve in days of import at normal flow
+  const RESERVE_COUNTRIES = [
+    { code:'NL', name:'Netherlands', flag:'\u{1F1F3}\u{1F1F1}', baseReserve:45 },
+    { code:'DE', name:'Germany',     flag:'\u{1F1E9}\u{1F1EA}', baseReserve:90 },
+    { code:'UK', name:'United Kingdom',flag:'\u{1F1EC}\u{1F1E7}', baseReserve:50 },
+    { code:'FR', name:'France',      flag:'\u{1F1EB}\u{1F1F7}', baseReserve:85 },
+    { code:'IT', name:'Italy',       flag:'\u{1F1EE}\u{1F1F9}', baseReserve:70 },
+    { code:'JP', name:'Japan',       flag:'\u{1F1EF}\u{1F1F5}', baseReserve:120 },
+    { code:'KR', name:'South Korea', flag:'\u{1F1F0}\u{1F1F7}', baseReserve:95 },
+    { code:'IN', name:'India',       flag:'\u{1F1EE}\u{1F1F3}', baseReserve:65 },
+    { code:'CN', name:'China',       flag:'\u{1F1E8}\u{1F1F3}', baseReserve:80 },
+    { code:'US', name:'United States',flag:'\u{1F1FA}\u{1F1F8}', baseReserve:150 },
+  ];
 </script>
 
 <header>
-  <h1>🛢️ <span>Strait Watch</span> — Hormuz Tanker Tracker</h1>
+  <h1>&#x1F6E2;&#xFE0F; <span>Strait Watch</span> — Hormuz Tanker Tracker</h1>
   <div class="header-meta">
-    <span><span class="live-dot"></span> <span id="mode-label">Loading…</span></span>
+    <span><span class="live-dot"></span> <span id="mode-label">Loading&#x2026;</span></span>
     <span id="clock"></span>
-    <span id="countdown"></span>
     <div class="action-btns">
-      <a class="btn-alerts" href="https://hormuzpulse.substack.com" target="_blank" rel="noopener">📧 Get email alerts</a>
-      <a class="btn-support" href="https://ko-fi.com/hormuzpulse" target="_blank" rel="noopener">☕ Support this project</a>
-      <a class="btn-alerts" href="https://calendly.com/wail-emad/30min" target="_blank" rel="noopener">💼 Book consulting</a>
+      <a class="btn-alerts" href="https://hormuzpulse.substack.com" target="_blank" rel="noopener">&#x1F4E7; Get email alerts</a>
+      <a class="btn-support" href="https://ko-fi.com/hormuzpulse" target="_blank" rel="noopener">&#x2615; Support this project</a>
+      <a class="btn-alerts" href="https://calendly.com/wail-emad/30min" target="_blank" rel="noopener">&#x1F4BC; Book consulting</a>
     </div>
   </div>
 </header>
 
-<div id="config-banner">
-  <span>Mode: <strong id="banner-mode">Loading…</strong></span>
-  <span>Feed: <strong id="banner-refresh">—</strong></span>
-  <span>Deadline: <strong>6 Apr 2026</strong></span>
+<!-- COUNTDOWN BANNER -->
+<div id="countdown-banner">
+  <div class="cd-label">&#x23F0; TIME UNTIL US DEADLINE TO STRIKE IRAN'S ENERGY FLEET</div>
+  <div class="cd-timer" id="cd-timer">--d --h --m --s</div>
 </div>
 
-<!-- KPI Cards -->
+<div id="config-banner">
+  <span>Mode: <strong id="banner-mode">Loading&#x2026;</strong></span>
+  <span>Feed: <strong id="banner-refresh">&#x2014;</strong></span>
+  <span>Brent: <strong id="banner-brent">$--</strong></span>
+</div>
+
+<!-- KPI Cards — headline row: Transit, Queue, Avg Speed, Brent -->
 <div class="kpi-row">
   <div class="kpi blue">
     <div class="kpi-label">Vessels in Transit</div>
-    <div class="kpi-value" id="kpi-transit">—</div>
+    <div class="kpi-value" id="kpi-transit">&#x2014;</div>
     <div class="kpi-sub">Currently moving through strait</div>
   </div>
   <div class="kpi yellow">
     <div class="kpi-label">Queued / Waiting</div>
-    <div class="kpi-value" id="kpi-queued">—</div>
+    <div class="kpi-value" id="kpi-queued">&#x2014;</div>
     <div class="kpi-sub">Anchored near approaches</div>
   </div>
   <div class="kpi red">
-    <div class="kpi-label">Avg Wait (hrs)</div>
-    <div class="kpi-value" id="kpi-wait">—</div>
-    <div class="kpi-sub">Mean anchor time before transit</div>
+    <div class="kpi-label">Avg Speed (kn)</div>
+    <div class="kpi-value" id="kpi-speed">&#x2014;</div>
+    <div class="kpi-sub">Mean speed of vessels in transit</div>
   </div>
   <div class="kpi green">
-    <div class="kpi-label">24h Throughput</div>
-    <div class="kpi-value" id="kpi-throughput">—</div>
-    <div class="kpi-sub">Vessels cleared last 24 hrs</div>
+    <div class="kpi-label">Brent Crude ($/bbl)</div>
+    <div class="kpi-value" id="kpi-brent">&#x2014;</div>
+    <div class="kpi-sub">Global oil benchmark price</div>
   </div>
+</div>
+
+<!-- Secondary stats -->
+<div class="stats-secondary">
+  <div class="stat-mini">&#x23F1; Avg Wait:<strong id="sec-wait">&#x2014;</strong></div>
+  <div class="stat-mini">&#x1F6A2; 24h Throughput:<strong id="sec-throughput">&#x2014;</strong></div>
+  <div class="stat-mini">&#x1F30D; Total Tracked:<strong id="sec-total">&#x2014;</strong></div>
 </div>
 
 <!-- Map + Chart -->
 <div class="main-grid">
   <div class="panel">
-    <div class="panel-title">📍 Live Vessel Map — Strait of Hormuz</div>
+    <div class="panel-title">
+      &#x1F4CD; Live Vessel Map — Strait of Hormuz
+      <div class="traffic-light" id="traffic-light">
+        <div class="tl-dot tl-green" id="tl-green"></div>
+        <div class="tl-dot tl-yellow" id="tl-yellow"></div>
+        <div class="tl-dot tl-red" id="tl-red"></div>
+      </div>
+    </div>
     <div id="map"></div>
   </div>
   <div class="panel">
-    <div class="panel-title">📊 24-Hour Transit Volume</div>
+    <div class="panel-title">&#x1F4CA; 24-Hour Transit Volume</div>
     <div id="chart-wrap"><canvas id="transitChart"></canvas></div>
   </div>
 
   <!-- Vessel Table -->
   <div class="panel table-wrap">
-    <div class="panel-title">🚢 Vessel Register</div>
+    <div class="panel-title">&#x1F6A2; Vessel Register</div>
     <div class="scroll-table">
       <table>
         <thead>
-          <tr><th>Vessel Name</th><th>IMO</th><th>Flag</th><th>Type</th><th>Status</th><th>Speed (kn)</th><th>Heading</th><th>Last Seen (UTC)</th></tr>
+          <tr><th>Vessel Name</th><th>Flag</th><th>Type</th><th>Status</th><th>Speed (kn)</th><th>Heading</th><th>Last Seen (UTC)</th></tr>
         </thead>
         <tbody id="vessel-tbody"></tbody>
       </table>
     </div>
   </div>
+
+  <!-- DAYS UNTIL DARK -->
+  <div class="panel dark-panel">
+    <div class="panel-title">&#x1F6A8; Days Until Dark — Oil Reserve Countdown by Country</div>
+    <div class="dark-grid" id="dark-grid"></div>
+  </div>
 </div>
 
 <footer>
-  Built by <a href="#">Strait Watch</a> · Live vessel data via <a href="https://aisstream.io" target="_blank" rel="noopener">AISstream.io</a> · <a href="https://github.com/xadon108/strait-watch" id="gh-link">GitHub</a>
+  Built by <a href="#">Strait Watch</a> &middot; Live vessel data via <a href="https://aisstream.io" target="_blank" rel="noopener">AISstream.io</a> &middot; <a href="https://github.com/xadon108/strait-watch" id="gh-link">GitHub</a>
 </footer>
 
 <!-- ======================== APP LOGIC ======================== -->
@@ -174,25 +281,41 @@
   const $ = s => document.querySelector(s);
   const now = () => new Date();
 
-  // ── Clock + Countdown ──
-  function tick(){
-    $('#clock').textContent = now().toUTCString().slice(0,-4)+' UTC';
+  // ── Countdown Banner (ticks every second) ──
+  function tickCountdown(){
     const dl = new Date(CONFIG.DEADLINE) - now();
+    const el = $('#cd-timer');
+    const banner = $('#countdown-banner');
     if(dl > 0){
-      const d=Math.floor(dl/864e5), h=Math.floor(dl%864e5/36e5), m=Math.floor(dl%36e5/6e4);
-      $('#countdown').textContent = `⏱ Deadline: ${d}d ${h}h ${m}m`;
+      const d=Math.floor(dl/864e5),
+            h=Math.floor(dl%864e5/36e5),
+            m=Math.floor(dl%36e5/6e4),
+            s=Math.floor(dl%6e4/1e3);
+      el.innerHTML = `<b>${d}</b>d <b>${String(h).padStart(2,'0')}</b>h <b>${String(m).padStart(2,'0')}</b>m <b>${String(s).padStart(2,'0')}</b>s`;
+      banner.classList.toggle('urgent', dl < 864e5); // under 24h
     } else {
-      $('#countdown').textContent = '⏱ Deadline passed';
+      el.innerHTML = '<b>DEADLINE PASSED</b>';
+      banner.classList.add('urgent');
     }
   }
-  tick(); setInterval(tick, 30000);
+  tickCountdown();
+  setInterval(tickCountdown, 1000);
+
+  // ── Clock ──
+  function tickClock(){
+    $('#clock').textContent = now().toUTCString().slice(0,-4)+' UTC';
+  }
+  tickClock(); setInterval(tickClock, 30000);
+
+  // ── Brent price ──
+  $('#kpi-brent').textContent = '$' + CONFIG.BRENT_PRICE.toFixed(2);
+  $('#banner-brent').textContent = '$' + CONFIG.BRENT_PRICE.toFixed(2) + '/bbl';
 
   // ── Vessel store ──
   const vesselMap = new Map();
 
-  // ── Live data fetch from data/vessels.json (updated by GitHub Actions every 5 min) ──
+  // ── Live data fetch ──
   let fetchRunning = false;
-
   function fetchVessels(){
     fetch(CONFIG.DATA_URL + '?t=' + Date.now())
       .then(r => { if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
@@ -202,58 +325,53 @@
           vesselMap.set(v.imo, {
             name:     v.name     || `MMSI ${v.imo}`,
             imo:      v.imo,
-            flag:     v.flag     || '—',
+            flag:     v.flag     || '\u2014',
             type:     v.type     || 'Vessel',
             status:   v.status   || 'transit',
             speed:    v.speed    ?? 0,
             heading:  v.heading  ?? 0,
             lat:      v.lat      ?? 0,
             lng:      v.lng      ?? 0,
-            lastSeen: v.last_seen || '—',
+            lastSeen: v.last_seen || '\u2014',
+            photoUrl: v.photoUrl || null,
           });
         });
-
+        if(data.brent) CONFIG.BRENT_PRICE = data.brent;
         const updatedAt = data.updated
           ? new Date(data.updated).toUTCString().slice(0,-4)+' UTC'
-          : '—';
-        $('#mode-label').textContent  = '🟢 Live AIS';
-        $('#banner-mode').textContent = 'Live — AISstream.io via GitHub Actions';
+          : '\u2014';
+        $('#mode-label').textContent  = '\u{1F7E2} Live AIS';
+        $('#banner-mode').textContent = 'Live \u2014 AISstream.io via GitHub Actions';
         $('#banner-refresh').textContent = 'Updated: ' + updatedAt;
         render();
       })
       .catch(() => {
-        // data/vessels.json not yet available — keep showing loading state briefly
-        // then fall back to realistic simulation
-        if(!fetchRunning){
-          fetchRunning = true;
-          fallbackSimulation();
-        }
+        if(!fetchRunning){ fetchRunning = true; fallbackSimulation(); }
       });
   }
 
-  // ── Fallback simulation (while GitHub Actions hasn't run yet) ──
+  // ── Fallback simulation ──
   function rnd(a,b){ return Math.floor(Math.random()*(b-a+1))+a; }
   const SIM_NAMES=['Front Endurance','Nissos Rhenia','Al Dafna','Celsius Riga','Eagle Vancouver',
     'Maran Sagitta','DHT Hawk','Hafnia Phoenix','Kriti Amber','Nordic Zenith',
     'Qatar Spirit','Stena Sunrise','Bahri Yanbu','Desert Falcon','Gulf Coral',
     'Pacific Jewel','Energy Centurion','Oman Qalhat','Alta Mira','Lion Spirit'];
   const STATUSES=['transit','queued','queued','anchored','cleared'];
-
   function fallbackSimulation(){
-    $('#mode-label').textContent  = '🟡 Loading…';
-    $('#banner-mode').textContent = 'Fetching live data…';
+    $('#mode-label').textContent  = '\u{1F7E1} Loading\u2026';
+    $('#banner-mode').textContent = 'Fetching live data\u2026';
     $('#banner-refresh').textContent = '5 min';
     vesselMap.clear();
     for(let i=0;i<rnd(24,32);i++){
       const st=STATUSES[rnd(0,STATUSES.length-1)];
       vesselMap.set(9e6+i,{
-        name: SIM_NAMES[i%SIM_NAMES.length],
-        imo:9e6+i, flag:'—', type:'Tanker', status:st,
-        speed:st==='transit'?rnd(10,14):rnd(0,1),
+        name: SIM_NAMES[i%SIM_NAMES.length], imo:9e6+i, flag:'\u2014', type:'Tanker', status:st,
+        speed:st==='transit'?rnd(100,140)/10:rnd(0,5)/10,
         heading:st==='transit'?(rnd(0,1)?rnd(120,145):rnd(300,320)):rnd(250,310),
         lat:st==='transit'?(25.6+Math.random()*0.8):(st==='anchored'?27.4+Math.random()*0.2:27.1+Math.random()*0.3),
         lng:st==='transit'?(56.8+Math.random()*0.7):(st==='anchored'?55.6+Math.random()*0.4:56.0+Math.random()*0.5),
-        lastSeen:new Date(Date.now()-rnd(0,900000)).toISOString().slice(0,16).replace('T',' ')+' UTC'
+        lastSeen:new Date(Date.now()-rnd(0,900000)).toISOString().slice(0,16).replace('T',' ')+' UTC',
+        photoUrl: null,
       });
     }
     render();
@@ -262,22 +380,39 @@
   // ── Map ──
   const map = L.map('map',{zoomControl:false}).setView([26.3, 56.5], 8);
   L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{
-    attribution:'© OpenStreetMap © CARTO', maxZoom:18
+    attribution:'\u00A9 OpenStreetMap \u00A9 CARTO', maxZoom:18
   }).addTo(map);
   L.control.zoom({position:'bottomright'}).addTo(map);
   L.polygon([[26.6,56.0],[26.7,56.5],[26.4,56.7],[26.0,56.5],[26.1,56.0]],
     {color:'#38bdf8',weight:1,fillOpacity:0.06,dashArray:'6 4'})
-    .addTo(map).bindPopup('Strait of Hormuz — Transit Zone');
+    .addTo(map).bindPopup('Strait of Hormuz \u2014 Transit Zone');
 
   let markers=[];
   function statusColor(s){
     return s==='transit'?'#38bdf8':s==='queued'?'#f59e0b':s==='anchored'?'#ef4444':'#22c55e';
   }
 
+  function vesselPopup(v){
+    let html = '<div class="vessel-popup">';
+    html += `<div class="vp-name">${v.name}</div>`;
+    html += `<div class="vp-row"><span class="vp-label">IMO/MMSI</span><span>${v.imo}</span></div>`;
+    html += `<div class="vp-row"><span class="vp-label">Flag</span><span>${v.flag}</span></div>`;
+    html += `<div class="vp-row"><span class="vp-label">Type</span><span>${v.type}</span></div>`;
+    html += `<div class="vp-row"><span class="vp-label">Status</span><span><b>${v.status}</b></span></div>`;
+    html += `<div class="vp-row"><span class="vp-label">Speed</span><span>${v.speed} kn</span></div>`;
+    html += `<div class="vp-row"><span class="vp-label">Heading</span><span>${v.heading}\u00B0</span></div>`;
+    html += `<div class="vp-row"><span class="vp-label">Last seen</span><span>${v.lastSeen}</span></div>`;
+    if(v.photoUrl){
+      html += `<img src="${v.photoUrl}" alt="${v.name}" onerror="this.style.display='none'" />`;
+    }
+    html += `<a class="vp-link" href="https://www.marinetraffic.com/en/ais/details/ships/${v.imo}" target="_blank" rel="noopener">\u{1F50D} View on MarineTraffic \u2192</a>`;
+    html += '</div>';
+    return html;
+  }
+
   // ── Chart ──
   const ctx = $('#transitChart').getContext('2d');
   const chartLabels = Array.from({length:24},(_,i)=>`${String(i).padStart(2,'0')}:00`);
-  // Hourly bucket: track how many position updates we get per hour
   const hourBuckets = new Array(24).fill(0);
   const chart = new Chart(ctx,{
     type:'bar',
@@ -295,34 +430,99 @@
     }
   });
 
+  // ── Traffic light logic ──
+  function updateTrafficLight(queued, transit){
+    const ratio = transit > 0 ? queued / transit : 99;
+    document.querySelectorAll('.tl-dot').forEach(d => d.classList.remove('active'));
+    if(ratio < 1.5){
+      $('#tl-green').classList.add('active');
+    } else if(ratio < 3){
+      $('#tl-yellow').classList.add('active');
+    } else {
+      $('#tl-red').classList.add('active');
+    }
+  }
+
+  // ── Days Until Dark ──
+  function renderDaysUntilDark(throughputPerDay){
+    const grid = $('#dark-grid');
+    grid.innerHTML = '';
+    // If strait blocked: throughput drops. Simulate: current throughput as fraction of normal (~40/day)
+    const normalThroughput = 40;
+    const flowRatio = Math.max(0.01, throughputPerDay / normalThroughput);
+
+    RESERVE_COUNTRIES.forEach(c => {
+      const daysLeft = Math.round(c.baseReserve * flowRatio);
+      const pct = Math.min(100, Math.round((daysLeft / c.baseReserve) * 100));
+      let cls = 'ok', rowCls = '';
+      if(daysLeft < 5){ cls='red'; rowCls='warn-red'; }
+      else if(daysLeft < 10){ cls='amber'; rowCls='warn-amber'; }
+
+      const row = document.createElement('div');
+      row.className = 'dark-row ' + rowCls;
+      row.innerHTML = `
+        <div class="dark-flag">${c.flag}</div>
+        <div class="dark-info">
+          <div class="dark-country">${c.name}</div>
+          <div class="dark-days ${cls}">${daysLeft} days</div>
+          <div class="dark-base">Base reserve: ${c.baseReserve} days</div>
+          <div class="dark-bar-wrap"><div class="dark-bar ${cls}" style="width:${pct}%"></div></div>
+        </div>
+        ${daysLeft < 10 ? '<div class="dark-warn-icon">\u26A0\uFE0F</div>' : ''}
+      `;
+      grid.appendChild(row);
+    });
+  }
+
   // ── Render ──
   let lastRender = 0;
   function render(){
     const now_ms = Date.now();
-    if(now_ms - lastRender < 2000) return; // throttle to max once per 2 s
+    if(now_ms - lastRender < 2000) return;
     lastRender = now_ms;
 
     const vessels = [...vesselMap.values()].filter(v => v.lat && v.lng);
-    const transit  = vessels.filter(v=>v.status==='transit').length;
+    const transitV = vessels.filter(v=>v.status==='transit');
+    const transit  = transitV.length;
     const queued   = vessels.filter(v=>v.status==='queued').length;
     const anchored = vessels.filter(v=>v.status==='anchored').length;
     const cleared  = vessels.filter(v=>v.status==='cleared').length;
-    const avgWait  = anchored > 0 ? (anchored * 2.3).toFixed(1) : '—';
 
-    $('#kpi-transit').textContent    = transit;
-    $('#kpi-queued').textContent     = queued + anchored;
-    $('#kpi-wait').textContent       = avgWait;
-    $('#kpi-throughput').textContent = cleared || transit;
+    // Avg speed of transit vessels
+    const avgSpeed = transit > 0
+      ? (transitV.reduce((s,v)=>s+v.speed,0)/transit).toFixed(1)
+      : '\u2014';
 
-    // Map markers
+    const avgWait = anchored > 0 ? (anchored * 2.3).toFixed(1) : '\u2014';
+
+    // KPIs
+    $('#kpi-transit').textContent = transit;
+    $('#kpi-queued').textContent  = queued + anchored;
+    $('#kpi-speed').textContent   = avgSpeed;
+    $('#kpi-brent').textContent   = '$' + CONFIG.BRENT_PRICE.toFixed(2);
+
+    // Secondary stats
+    $('#sec-wait').textContent       = avgWait === '\u2014' ? ' \u2014' : ' ' + avgWait + 'h';
+    $('#sec-throughput').textContent  = ' ' + (cleared || transit);
+    $('#sec-total').textContent       = ' ' + vessels.length;
+
+    // Traffic light
+    updateTrafficLight(queued + anchored, transit);
+
+    // Map markers — pulsing circles
     markers.forEach(m=>map.removeLayer(m));
     markers=[];
     vessels.forEach(v=>{
       const c=statusColor(v.status);
-      const m=L.circleMarker([v.lat,v.lng],{radius:5,color:c,fillColor:c,fillOpacity:0.85,weight:1})
-        .bindPopup(`<b>${v.name}</b><br>MMSI: ${v.imo}<br>Type: ${v.type}<br>Status: <b>${v.status}</b><br>Speed: ${v.speed} kn<br>Heading: ${v.heading}°<br>Last: ${v.lastSeen}`)
+      // Outer glow ring
+      const glow = L.circleMarker([v.lat,v.lng],{
+        radius:9, color:c, fillColor:c, fillOpacity:0.15, weight:0, className:'map-pulse'
+      }).addTo(map);
+      // Main dot
+      const m=L.circleMarker([v.lat,v.lng],{radius:5,color:c,fillColor:c,fillOpacity:0.9,weight:1})
+        .bindPopup(vesselPopup(v), {maxWidth:260})
         .addTo(map);
-      markers.push(m);
+      markers.push(m, glow);
     });
 
     // Table
@@ -332,21 +532,24 @@
     [...vessels].sort((a,b)=>order.indexOf(a.status)-order.indexOf(b.status)).forEach(v=>{
       tbody.innerHTML+=`<tr>
         <td><strong>${v.name}</strong></td>
-        <td>${v.imo}</td><td>${v.flag}</td><td>${v.type}</td>
+        <td>${v.flag}</td><td>${v.type}</td>
         <td><span class="badge badge-${v.status}">${v.status}</span></td>
-        <td>${v.speed}</td><td>${v.heading}°</td><td>${v.lastSeen}</td>
+        <td>${v.speed}</td><td>${v.heading}\u00B0</td><td>${v.lastSeen}</td>
       </tr>`;
     });
 
-    // Chart: fill current hour with live count
+    // Chart
     const hr = new Date().getUTCHours();
     hourBuckets[hr] = vessels.length;
     chart.data.datasets[0].data = [...hourBuckets];
     chart.update('none');
+
+    // Days Until Dark
+    const estimatedDaily = (cleared || transit) * 2.4; // rough 24h extrapolation
+    renderDaysUntilDark(estimatedDaily);
   }
 
   // ── Boot ──
-  // Try to load live data immediately, then refresh every 5 minutes
   fetchVessels();
   setInterval(fetchVessels, CONFIG.REFRESH_MS);
 })();
