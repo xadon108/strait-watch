@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Strait Watch — Live Hormuz Tanker Tracker</title>
+<title>Strait Watch â Live Hormuz Tanker Tracker</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -109,7 +109,7 @@
   .badge-cleared { background:rgba(34,197,94,0.15); color:var(--ok); }
   .scroll-table { max-height:400px; overflow-y:auto; }
 
-  /* ── DAYS UNTIL DARK panel ── */
+  /* ââ DAYS UNTIL DARK panel ââ */
   .dark-panel { grid-column: 1 / -1; }
   .dark-panel .panel-title { color: #fca5a5; }
   .dark-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap:0.75rem; padding:1rem; }
@@ -178,66 +178,66 @@
 </script>
 
 <header>
-  <h1>&#x1F6E2;&#xFE0F; <span>Strait Watch</span> — Hormuz Tanker Tracker</h1>
+  <h1>\u{1F6E2}\uFE0F <span>Strait Watch</span> â Hormuz Tanker Tracker</h1>
   <div class="header-meta">
-    <span><span class="live-dot"></span> <span id="mode-label">Loading&#x2026;</span></span>
+    <span><span class="live-dot"></span> <span id="mode-label">Loading\u2026</span></span>
     <span id="clock"></span>
     <div class="action-btns">
-      <a class="btn-alerts" href="https://hormuzpulse.substack.com" target="_blank" rel="noopener">&#x1F4E7; Get email alerts</a>
-      <a class="btn-support" href="https://ko-fi.com/hormuzpulse" target="_blank" rel="noopener">&#x2615; Support this project</a>
-      <a class="btn-alerts" href="https://calendly.com/wail-emad/30min" target="_blank" rel="noopener">&#x1F4BC; Book consulting</a>
+      <a class="btn-alerts" href="https://hormuzpulse.substack.com" target="_blank" rel="noopener">\u{1F4E7} Get email alerts</a>
+      <a class="btn-support" href="https://ko-fi.com/hormuzpulse" target="_blank" rel="noopener">\u2615 Support this project</a>
+      <a class="btn-alerts" href="https://calendly.com/wail-emad/30min" target="_blank" rel="noopener">\u{1F4BC} Book consulting</a>
     </div>
   </div>
 </header>
 
 <!-- COUNTDOWN BANNER -->
 <div id="countdown-banner">
-  <div class="cd-label">&#x23F0; TIME UNTIL US DEADLINE TO STRIKE IRAN'S ENERGY FLEET</div>
+  <div class="cd-label">\u23F0 TIME UNTIL US DEADLINE TO STRIKE IRAN'S ENERGY FLEET</div>
   <div class="cd-timer" id="cd-timer">--d --h --m --s</div>
 </div>
 
 <div id="config-banner">
-  <span>Mode: <strong id="banner-mode">Loading&#x2026;</strong></span>
-  <span>Feed: <strong id="banner-refresh">&#x2014;</strong></span>
+  <span>Mode: <strong id="banner-mode">Loading\u2026</strong></span>
+  <span>Feed: <strong id="banner-refresh">\u2014</strong></span>
   <span>Brent: <strong id="banner-brent">$--</strong></span>
 </div>
 
-<!-- KPI Cards — headline row: Transit, Queue, Avg Speed, Brent -->
+<!-- KPI Cards â headline row: Transit, Queue, Avg Speed, Brent -->
 <div class="kpi-row">
   <div class="kpi blue">
     <div class="kpi-label">Vessels in Transit</div>
-    <div class="kpi-value" id="kpi-transit">&#x2014;</div>
+    <div class="kpi-value" id="kpi-transit">\u2014</div>
     <div class="kpi-sub">Currently moving through strait</div>
   </div>
   <div class="kpi yellow">
     <div class="kpi-label">Queued / Waiting</div>
-    <div class="kpi-value" id="kpi-queued">&#x2014;</div>
+    <div class="kpi-value" id="kpi-queued">\u2014</div>
     <div class="kpi-sub">Anchored near approaches</div>
   </div>
   <div class="kpi red">
     <div class="kpi-label">Avg Speed (kn)</div>
-    <div class="kpi-value" id="kpi-speed">&#x2014;</div>
+    <div class="kpi-value" id="kpi-speed">\u2014</div>
     <div class="kpi-sub">Mean speed of vessels in transit</div>
   </div>
   <div class="kpi green">
     <div class="kpi-label">Brent Crude ($/bbl)</div>
-    <div class="kpi-value" id="kpi-brent">&#x2014;</div>
+    <div class="kpi-value" id="kpi-brent">\u2014</div>
     <div class="kpi-sub">Global oil benchmark price</div>
   </div>
 </div>
 
 <!-- Secondary stats -->
 <div class="stats-secondary">
-  <div class="stat-mini">&#x23F1; Avg Wait:<strong id="sec-wait">&#x2014;</strong></div>
-  <div class="stat-mini">&#x1F6A2; 24h Throughput:<strong id="sec-throughput">&#x2014;</strong></div>
-  <div class="stat-mini">&#x1F30D; Total Tracked:<strong id="sec-total">&#x2014;</strong></div>
+  <div class="stat-mini">\u23F1 Avg Wait:<strong id="sec-wait">\u2014</strong></div>
+  <div class="stat-mini">\u{1F6A2} 24h Throughput:<strong id="sec-throughput">\u2014</strong></div>
+  <div class="stat-mini">\u{1F30D} Total Tracked:<strong id="sec-total">\u2014</strong></div>
 </div>
 
 <!-- Map + Chart -->
 <div class="main-grid">
   <div class="panel">
     <div class="panel-title">
-      &#x1F4CD; Live Vessel Map — Strait of Hormuz
+      \u{1F4CD} Live Vessel Map â Strait of Hormuz
       <div class="traffic-light" id="traffic-light">
         <div class="tl-dot tl-green" id="tl-green"></div>
         <div class="tl-dot tl-yellow" id="tl-yellow"></div>
@@ -247,13 +247,13 @@
     <div id="map"></div>
   </div>
   <div class="panel">
-    <div class="panel-title">&#x1F4CA; 24-Hour Transit Volume</div>
+    <div class="panel-title">\u{1F4CA} 24-Hour Transit Volume</div>
     <div id="chart-wrap"><canvas id="transitChart"></canvas></div>
   </div>
 
   <!-- Vessel Table -->
   <div class="panel table-wrap">
-    <div class="panel-title">&#x1F6A2; Vessel Register</div>
+    <div class="panel-title">\u{1F6A2} Vessel Register</div>
     <div class="scroll-table">
       <table>
         <thead>
@@ -266,13 +266,13 @@
 
   <!-- DAYS UNTIL DARK -->
   <div class="panel dark-panel">
-    <div class="panel-title">&#x1F6A8; Days Until Dark — Oil Reserve Countdown by Country</div>
+    <div class="panel-title">\u{1F6A8} Days Until Dark â Oil Reserve Countdown by Country</div>
     <div class="dark-grid" id="dark-grid"></div>
   </div>
 </div>
 
 <footer>
-  Built by <a href="#">Strait Watch</a> &middot; Live vessel data via <a href="https://aisstream.io" target="_blank" rel="noopener">AISstream.io</a> &middot; <a href="https://github.com/xadon108/strait-watch" id="gh-link">GitHub</a>
+  Built by <a href="#">Strait Watch</a> \u00B7 Live vessel data via <a href="https://aisstream.io" target="_blank" rel="noopener">AISstream.io</a> \u00B7 <a href="https://github.com/xadon108/strait-watch" id="gh-link">GitHub</a>
 </footer>
 
 <!-- ======================== APP LOGIC ======================== -->
@@ -281,7 +281,7 @@
   const $ = s => document.querySelector(s);
   const now = () => new Date();
 
-  // ── Countdown Banner (ticks every second) ──
+  // ââ Countdown Banner (ticks every second) ââ
   function tickCountdown(){
     const dl = new Date(CONFIG.DEADLINE) - now();
     const el = $('#cd-timer');
@@ -301,20 +301,49 @@
   tickCountdown();
   setInterval(tickCountdown, 1000);
 
-  // ── Clock ──
+  // ââ Clock ââ
   function tickClock(){
     $('#clock').textContent = now().toUTCString().slice(0,-4)+' UTC';
   }
   tickClock(); setInterval(tickClock, 30000);
 
-  // ── Brent price ──
-  $('#kpi-brent').textContent = '$' + CONFIG.BRENT_PRICE.toFixed(2);
-  $('#banner-brent').textContent = '$' + CONFIG.BRENT_PRICE.toFixed(2) + '/bbl';
+  // ââ Live Brent price ââ
+  function updateBrentDisplay(price) {
+    CONFIG.BRENT_PRICE = price;
+    $('#kpi-brent').textContent = '$' + price.toFixed(2);
+    $('#banner-brent').textContent = '$' + price.toFixed(2) + '/bbl';
+  }
+  function fetchBrentPrice() {
+    const yahooUrl = 'https://query1.finance.yahoo.com/v8/finance/chart/BZ=F?interval=1d&range=1d';
+    fetch(yahooUrl)
+      .then(r => { if (!r.ok) throw new Error('yahoo'); return r.json(); })
+      .then(data => {
+        const price = data?.chart?.result?.[0]?.meta?.regularMarketPrice;
+        if (price && price > 0) updateBrentDisplay(price);
+        else throw new Error('no price');
+      })
+      .catch(() => {
+        // Fallback via CORS proxy
+        const proxy = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(yahooUrl);
+        fetch(proxy)
+          .then(r => r.json())
+          .then(data => {
+            const price = data?.chart?.result?.[0]?.meta?.regularMarketPrice;
+            if (price && price > 0) updateBrentDisplay(price);
+          })
+          .catch(() => {
+            // Both failed â keep last known price shown already
+          });
+      });
+  }
+  updateBrentDisplay(CONFIG.BRENT_PRICE); // show static value immediately
+  fetchBrentPrice();                       // then fetch live price
+  setInterval(fetchBrentPrice, 15 * 60 * 1000); // refresh every 15 min
 
-  // ── Vessel store ──
+  // ââ Vessel store ââ
   const vesselMap = new Map();
 
-  // ── Live data fetch ──
+  // ââ Live data fetch ââ
   let fetchRunning = false;
   function fetchVessels(){
     fetch(CONFIG.DATA_URL + '?t=' + Date.now())
@@ -350,7 +379,7 @@
       });
   }
 
-  // ── Fallback simulation ──
+  // ââ Fallback simulation ââ
   function rnd(a,b){ return Math.floor(Math.random()*(b-a+1))+a; }
   const SIM_NAMES=['Front Endurance','Nissos Rhenia','Al Dafna','Celsius Riga','Eagle Vancouver',
     'Maran Sagitta','DHT Hawk','Hafnia Phoenix','Kriti Amber','Nordic Zenith',
@@ -377,7 +406,7 @@
     render();
   }
 
-  // ── Map ──
+  // ââ Map ââ
   const map = L.map('map',{zoomControl:false}).setView([26.3, 56.5], 8);
   L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{
     attribution:'\u00A9 OpenStreetMap \u00A9 CARTO', maxZoom:18
@@ -410,7 +439,7 @@
     return html;
   }
 
-  // ── Chart ──
+  // ââ Chart ââ
   const ctx = $('#transitChart').getContext('2d');
   const chartLabels = Array.from({length:24},(_,i)=>`${String(i).padStart(2,'0')}:00`);
   const hourBuckets = new Array(24).fill(0);
@@ -430,7 +459,7 @@
     }
   });
 
-  // ── Traffic light logic ──
+  // ââ Traffic light logic ââ
   function updateTrafficLight(queued, transit){
     const ratio = transit > 0 ? queued / transit : 99;
     document.querySelectorAll('.tl-dot').forEach(d => d.classList.remove('active'));
@@ -443,7 +472,7 @@
     }
   }
 
-  // ── Days Until Dark ──
+  // ââ Days Until Dark ââ
   function renderDaysUntilDark(throughputPerDay){
     const grid = $('#dark-grid');
     grid.innerHTML = '';
@@ -474,7 +503,7 @@
     });
   }
 
-  // ── Render ──
+  // ââ Render ââ
   let lastRender = 0;
   function render(){
     const now_ms = Date.now();
@@ -509,7 +538,7 @@
     // Traffic light
     updateTrafficLight(queued + anchored, transit);
 
-    // Map markers — pulsing circles
+    // Map markers â pulsing circles
     markers.forEach(m=>map.removeLayer(m));
     markers=[];
     vessels.forEach(v=>{
@@ -529,7 +558,7 @@
     const order=['transit','queued','anchored','cleared'];
     const tbody=$('#vessel-tbody');
     tbody.innerHTML='';
-    [...vessels].sort((a,b)=>order.indexOf(a.status)-order.indexOf(b.status)).forEach(v=>{
+    [...vessels.].sort((a,b)=>order.indexOf(a.status)-order.indexOf(b.status)).forEach(v=>{
       tbody.innerHTML+=`<tr>
         <td><strong>${v.name}</strong></td>
         <td>${v.flag}</td><td>${v.type}</td>
@@ -549,7 +578,7 @@
     renderDaysUntilDark(estimatedDaily);
   }
 
-  // ── Boot ──
+  // ââ Boot ââ
   fetchVessels();
   setInterval(fetchVessels, CONFIG.REFRESH_MS);
 })();
