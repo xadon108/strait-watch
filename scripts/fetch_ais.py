@@ -14,10 +14,11 @@ import sys
 from datetime import datetime, timezone
 
 # ── Config ─────────────────────────────────────────────────────────────────
-AIS_KEY   = os.environ.get('AIS_KEY', '428b4fa1f31b6522c661fd228cead73f467f28d2')
-BBOX      = [[24.5, 55.5], [27.5, 58.5]]   # Strait of Hormuz + approaches
-COLLECT_S = 60                              # Seconds to collect data
-OUT_FILE  = 'data/vessels.json'
+AIS_KEY = os.environ.get('AIS_KEY', '428b4fa1f31b6522c661fd228cead73f467f28d2')
+BBOX = [[24.5, 55.5], [27.5, 58.5]]  # Strait of Hormuz + approaches
+COLLECT_S = 60                         # Seconds to collect data
+OUT_FILE = 'data/vessels.json'
+MIN_VESSELS = 3                        # Don't save if fewer than this
 
 # ── Ship type helper ────────────────────────────────────────────────────────
 def ship_type(t):
@@ -62,7 +63,7 @@ async def fetch():
             while asyncio.get_event_loop().time() < deadline:
                 try:
                     raw = await asyncio.wait_for(ws.recv(), timeout=5)
-                    msg  = json.loads(raw)
+                    msg = json.loads(raw)
                     meta = msg.get('MetaData', {})
                     mmsi = meta.get('MMSI')
                     if not mmsi:
@@ -71,7 +72,7 @@ async def fetch():
                     mtype = msg.get('MessageType', '')
 
                     if mtype == 'PositionReport':
-                        pr  = msg.get('Message', {}).get('PositionReport', {})
+                        pr = msg.get('Message', {}).get('PositionReport', {})
                         sog = pr.get('Sog')
                         hdg = pr.get('TrueHeading', 511)
                         if hdg >= 360:
@@ -80,17 +81,17 @@ async def fetch():
                         existing = vessels.get(mmsi, {})
                         vessels[mmsi] = {
                             **existing,
-                            'imo':       mmsi,
-                            'name':      (meta.get('ShipName') or '').strip() or existing.get('name', f'MMSI {mmsi}'),
-                            'flag':      existing.get('flag', '--'),
-                            'type':      existing.get('type', 'Vessel'),
-                            'status':    nav_status(pr.get('NavigationalStatus', 15), sog),
-                            'speed':     round((sog or 0) * 10) / 10,
-                            'heading':   round(hdg, 1),
-                            'lat':       meta.get('latitude', existing.get('lat', 0)),
-                            'lng':       meta.get('longitude', existing.get('lng', 0)),
+                            'imo': mmsi,
+                            'name': (meta.get('ShipName') or '').strip() or existing.get('name', f'MMSI {mmsi}'),
+                            'flag': existing.get('flag', '--'),
+                            'type': existing.get('type', 'Vessel'),
+                            'status': nav_status(pr.get('NavigationalStatus', 15), sog),
+                            'speed': round((sog or 0) * 10) / 10,
+                            'heading': round(hdg, 1),
+                            'lat': meta.get('latitude', existing.get('lat', 0)),
+                            'lng': meta.get('longitude', existing.get('lng', 0)),
                             'last_seen': (meta.get('time_utc', '') or
-                                          datetime.now(timezone.utc).isoformat())[:16].replace('T', ' ') + ' UTC',
+                                datetime.now(timezone.utc).isoformat())[:16].replace('T', ' ') + ' UTC',
                         }
 
                     elif mtype == 'ShipStaticData':
@@ -98,7 +99,7 @@ async def fetch():
                         existing = vessels.get(mmsi, {})
                         vessels[mmsi] = {
                             **existing,
-                            'imo':  sd.get('ImoNumber') or mmsi,
+                            'imo': sd.get('ImoNumber') or mmsi,
                             'name': (sd.get('Name') or meta.get('ShipName') or '').strip() or existing.get('name', f'MMSI {mmsi}'),
                             'flag': sd.get('Destination', '--') or '--',
                             'type': ship_type(sd.get('Type', 0)),
@@ -109,16 +110,20 @@ async def fetch():
 
     except Exception as e:
         print(f'Connection error: {e}')
-        # If we got some vessels before the error, still save them
-        if not vessels:
-            print('No data collected - keeping existing vessels.json')
-            sys.exit(0)
+        # If we got some vessels before the error, still try to save them below
+        # but the MIN_VESSELS check will protect the existing file
+
+    # ── Guard: don't overwrite good data with empty/tiny result ──────────
+    if len(vessels) < MIN_VESSELS:
+        print(f'Only {len(vessels)} vessels collected (min {MIN_VESSELS}). '
+              f'Keeping existing {OUT_FILE} unchanged.')
+        sys.exit(0)
 
     # ── Write output ─────────────────────────────────────────────────────────
     os.makedirs('data', exist_ok=True)
     output = {
         'updated': datetime.now(timezone.utc).isoformat(),
-        'source':  'AISstream.io via GitHub Actions',
+        'source': 'AISstream.io via GitHub Actions',
         'vessels': list(vessels.values())
     }
     with open(OUT_FILE, 'w') as f:
