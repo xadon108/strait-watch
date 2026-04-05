@@ -15,29 +15,48 @@
   }
   * { margin:0; padding:0; box-sizing:border-box; }
   body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); min-height:100vh; }
+
+  /* Header */
   header { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border-bottom: 1px solid var(--border); padding: 1rem 2rem; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.5rem; }
   header h1 { font-size:1.5rem; font-weight:700; }
   header h1 span { color: var(--accent); }
   .header-meta { display:flex; gap:1.5rem; align-items:center; font-size:0.85rem; color:var(--muted); }
   .live-dot { width:8px; height:8px; border-radius:50%; background:var(--ok); display:inline-block; animation: pulse 2s infinite; margin-right:4px; }
   @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  /* Config banner */
   #config-banner { background: #1e293b; padding: 0.5rem 2rem; font-size: 0.8rem; color: var(--muted); border-bottom: 1px solid var(--border); display: flex; gap: 2rem; }
+
+  /* KPI row */
   .kpi-row { display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:1rem; padding:1.25rem 2rem; }
   .kpi { background: var(--card); border:1px solid var(--border); border-radius:12px; padding:1.25rem; position:relative; overflow:hidden; }
   .kpi::before { content:''; position:absolute; top:0; left:0; width:4px; height:100%; }
-  .kpi.blue::before { background: var(--accent); } .kpi.red::before { background: var(--danger); }
-  .kpi.yellow::before { background: var(--warn); } .kpi.green::before { background: var(--ok); }
+  .kpi.blue::before { background: var(--accent); }
+  .kpi.red::before { background: var(--danger); }
+  .kpi.yellow::before { background: var(--warn); }
+  .kpi.green::before { background: var(--ok); }
   .kpi-label { font-size:0.75rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--muted); margin-bottom:0.35rem; }
   .kpi-value { font-size:2rem; font-weight:700; line-height:1.1; }
   .kpi-sub { font-size:0.8rem; color:var(--muted); margin-top:0.25rem; }
-  .kpi.blue .kpi-value { color: var(--accent); } .kpi.red .kpi-value { color: var(--danger); }
-  .kpi.yellow .kpi-value { color: var(--warn); } .kpi.green .kpi-value { color: var(--ok); }
+  .kpi.blue .kpi-value { color: var(--accent); }
+  .kpi.red .kpi-value { color: var(--danger); }
+  .kpi.yellow .kpi-value { color: var(--warn); }
+  .kpi.green .kpi-value { color: var(--ok); }
+
+  /* Layout grid */
   .main-grid { display:grid; grid-template-columns: 1fr 1fr; gap:1rem; padding:0 2rem 1.25rem; }
   @media (max-width:900px) { .main-grid { grid-template-columns:1fr; } }
+
   .panel { background: var(--card); border:1px solid var(--border); border-radius:12px; overflow:hidden; }
   .panel-title { font-size:0.85rem; font-weight:600; padding:0.75rem 1rem; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:0.5rem; }
+
+  /* Map */
   #map { height: 350px; width:100%; }
+
+  /* Chart */
   #chart-wrap { padding: 0.75rem 1rem; height: 320px; }
+
+  /* Table */
   .table-wrap { grid-column: 1 / -1; }
   table { width:100%; border-collapse:collapse; font-size:0.82rem; }
   th { background:#1a2235; text-align:left; padding:0.6rem 0.75rem; color:var(--muted); text-transform:uppercase; font-size:0.7rem; letter-spacing:0.04em; position:sticky; top:0; }
@@ -49,186 +68,287 @@
   .badge-anchored { background:rgba(239,68,68,0.15); color:var(--danger); }
   .badge-cleared { background:rgba(34,197,94,0.15); color:var(--ok); }
   .scroll-table { max-height:340px; overflow-y:auto; }
+
+  /* Action buttons */
   .action-btns { display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap; }
   .btn-support { background: #FF5E5B; color:#fff; border:none; border-radius:8px; padding:0.45rem 0.9rem; font-size:0.8rem; font-weight:600; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:0.35rem; transition:opacity 0.2s; }
   .btn-support:hover { opacity:0.85; }
-  .btn-alerts { background: rgba(249,115,22,0.15); color:#fb923c; border:1px solid rgba(249,115,22,0.3); border-radius:8px; padding:0.45rem 0.9rem; font-size:0.8rem; font-weight:600; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:0.35rem; }
+  .btn-alerts { background: rgba(249,115,22,0.15); color:#fb923c; border:1px solid rgba(249,115,22,0.3); border-radius:8px; padding:0.45rem 0.9rem; font-size:0.8rem; font-weight:600; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:0.35rem; transition:background 0.2s; }
+  .btn-alerts:hover { background: rgba(249,115,22,0.25); }
+
+  /* Footer */
   footer { text-align:center; padding:1.5rem; font-size:0.75rem; color:var(--muted); border-top:1px solid var(--border); }
   footer a { color: var(--accent); text-decoration:none; }
 </style>
 </head>
 <body>
+
+<!-- ======================== CONFIG ======================== -->
 <script>
+  // ── CONFIGURATION ──────────────────────────────────────────
+  // Data is fetched from data/vessels.json, updated every 5 min via GitHub Actions.
+  // GitHub Actions connects server-side to AISstream.io (no CORS restriction).
   const CONFIG = {
-    LIVE_MODE:  true,
-    AIS_KEY:    '428b4fa1f31b6522c661fd228cead73f467f28d2',
-    BBOX:       [[24.5, 55.5], [27.5, 58.5]],
-    REFRESH_MS: 30000,
+    DATA_URL:   'data/vessels.json',
+    REFRESH_MS: 300000,   // re-fetch every 5 minutes (matches GitHub Action schedule)
     DEADLINE:   '2026-04-06T23:59:59Z',
   };
 </script>
+
 <header>
   <h1>🛢️ <span>Strait Watch</span> — Hormuz Tanker Tracker</h1>
   <div class="header-meta">
-    <span><span class="live-dot"></span> <span id="mode-label">Connecting…</span></span>
+    <span><span class="live-dot"></span> <span id="mode-label">Loading…</span></span>
     <span id="clock"></span>
     <span id="countdown"></span>
     <div class="action-btns">
-      <a class="btn-alerts" href="https://hormuzpulse.substack.com" target="_blank" rel="noopener">📧 Get alerts</a>
-      <a class="btn-support" href="https://ko-fi.com/hormuzpulse" target="_blank" rel="noopener">☕ Support</a>
+      <a class="btn-alerts" href="https://hormuzpulse.substack.com" target="_blank" rel="noopener">📧 Get email alerts</a>
+      <a class="btn-support" href="https://ko-fi.com/hormuzpulse" target="_blank" rel="noopener">☕ Support this project</a>
+      <a class="btn-alerts" href="https://calendly.com/wail-emad/30min" target="_blank" rel="noopener">💼 Book consulting</a>
     </div>
   </div>
 </header>
+
 <div id="config-banner">
-  <span>Mode: <strong id="banner-mode">Connecting…</strong></span>
+  <span>Mode: <strong id="banner-mode">Loading…</strong></span>
   <span>Feed: <strong id="banner-refresh">—</strong></span>
   <span>Deadline: <strong>6 Apr 2026</strong></span>
 </div>
+
+<!-- KPI Cards -->
 <div class="kpi-row">
-  <div class="kpi blue"><div class="kpi-label">Vessels in Transit</div><div class="kpi-value" id="kpi-transit">—</div><div class="kpi-sub">Moving through strait</div></div>
-  <div class="kpi yellow"><div class="kpi-label">Queued / Waiting</div><div class="kpi-value" id="kpi-queued">—</div><div class="kpi-sub">Anchored near approaches</div></div>
-  <div class="kpi red"><div class="kpi-label">Avg Wait (hrs)</div><div class="kpi-value" id="kpi-wait">—</div><div class="kpi-sub">Est. anchor time</div></div>
-  <div class="kpi green"><div class="kpi-label">Total Tracked</div><div class="kpi-value" id="kpi-throughput">—</div><div class="kpi-sub">Vessels in AIS zone</div></div>
-</div>
-<div class="main-grid">
-  <div class="panel"><div class="panel-title">📍 Live Vessel Map — Strait of Hormuz</div><div id="map"></div></div>
-  <div class="panel"><div class="panel-title">📊 Vessels by Hour (UTC)</div><div id="chart-wrap"><canvas id="transitChart"></canvas></div></div>
-  <div class="panel table-wrap">
-    <div class="panel-title">🚢 Live Vessel Register</div>
-    <div class="scroll-table"><table>
-      <thead><tr><th>Vessel</th><th>MMSI</th><th>Type</th><th>Status</th><th>Speed(kn)</th><th>Hdg</th><th>Last Seen (UTC)</th></tr></thead>
-      <tbody id="vessel-tbody"></tbody>
-    </table></div>
+  <div class="kpi blue">
+    <div class="kpi-label">Vessels in Transit</div>
+    <div class="kpi-value" id="kpi-transit">—</div>
+    <div class="kpi-sub">Currently moving through strait</div>
+  </div>
+  <div class="kpi yellow">
+    <div class="kpi-label">Queued / Waiting</div>
+    <div class="kpi-value" id="kpi-queued">—</div>
+    <div class="kpi-sub">Anchored near approaches</div>
+  </div>
+  <div class="kpi red">
+    <div class="kpi-label">Avg Wait (hrs)</div>
+    <div class="kpi-value" id="kpi-wait">—</div>
+    <div class="kpi-sub">Mean anchor time before transit</div>
+  </div>
+  <div class="kpi green">
+    <div class="kpi-label">24h Throughput</div>
+    <div class="kpi-value" id="kpi-throughput">—</div>
+    <div class="kpi-sub">Vessels cleared last 24 hrs</div>
   </div>
 </div>
-<footer>Strait Watch · Live data via <a href="https://aisstream.io" target="_blank">AISstream.io</a> · <a href="https://github.com/xadon108/strait-watch">GitHub</a></footer>
+
+<!-- Map + Chart -->
+<div class="main-grid">
+  <div class="panel">
+    <div class="panel-title">📍 Live Vessel Map — Strait of Hormuz</div>
+    <div id="map"></div>
+  </div>
+  <div class="panel">
+    <div class="panel-title">📊 24-Hour Transit Volume</div>
+    <div id="chart-wrap"><canvas id="transitChart"></canvas></div>
+  </div>
+
+  <!-- Vessel Table -->
+  <div class="panel table-wrap">
+    <div class="panel-title">🚢 Vessel Register</div>
+    <div class="scroll-table">
+      <table>
+        <thead>
+          <tr><th>Vessel Name</th><th>IMO</th><th>Flag</th><th>Type</th><th>Status</th><th>Speed (kn)</th><th>Heading</th><th>Last Seen (UTC)</th></tr>
+        </thead>
+        <tbody id="vessel-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<footer>
+  Built by <a href="#">Strait Watch</a> · Live vessel data via <a href="https://aisstream.io" target="_blank" rel="noopener">AISstream.io</a> · <a href="https://github.com/xadon108/strait-watch" id="gh-link">GitHub</a>
+</footer>
+
+<!-- ======================== APP LOGIC ======================== -->
 <script>
 (function(){
-  const $=s=>document.querySelector(s);
+  const $ = s => document.querySelector(s);
+  const now = () => new Date();
+
+  // ── Clock + Countdown ──
   function tick(){
-    $('#clock').textContent=new Date().toUTCString().slice(0,-4)+' UTC';
-    const dl=new Date(CONFIG.DEADLINE)-new Date();
-    if(dl>0){const d=Math.floor(dl/864e5),h=Math.floor(dl%864e5/36e5),m=Math.floor(dl%36e5/6e4);$('#countdown').textContent='⏱ '+d+'d '+h+'h '+m+'m';}
-    else $('#countdown').textContent='⏱ Deadline passed';
+    $('#clock').textContent = now().toUTCString().slice(0,-4)+' UTC';
+    const dl = new Date(CONFIG.DEADLINE) - now();
+    if(dl > 0){
+      const d=Math.floor(dl/864e5), h=Math.floor(dl%864e5/36e5), m=Math.floor(dl%36e5/6e4);
+      $('#countdown').textContent = `⏱ Deadline: ${d}d ${h}h ${m}m`;
+    } else {
+      $('#countdown').textContent = '⏱ Deadline passed';
+    }
   }
-  tick();setInterval(tick,30000);
+  tick(); setInterval(tick, 30000);
 
-  const vesselMap=new Map();
-  let wsConnected=false, simRunning=false;
+  // ── Vessel store ──
+  const vesselMap = new Map();
 
-  function navToStatus(n,sog){
-    if(n===1||n===5)return'anchored';
-    if(n===3||n===4)return'queued';
-    if(sog!==undefined&&sog<0.5)return'anchored';
-    return'transit';
-  }
+  // ── Live data fetch from data/vessels.json (updated by GitHub Actions every 5 min) ──
+  let fetchRunning = false;
 
-  function connectAIS(){
-    let ws;
-    try{ws=new WebSocket('wss://stream.aisstream.io/v0/stream');}
-    catch(e){fallbackSimulation();return;}
-
-    // If WebSocket hangs in CONNECTING for 8s, fall back to simulation
-    const connTimer=setTimeout(()=>{
-      if(!wsConnected){try{ws.close();}catch(e){}fallbackSimulation();}
-    },8000);
-
-    ws.onopen=()=>{
-      clearTimeout(connTimer);
-      ws.send(JSON.stringify({APIKey:CONFIG.AIS_KEY,BoundingBoxes:[CONFIG.BBOX],FilterMessageTypes:['PositionReport','ShipStaticData']}));
-      wsConnected=true;
-      $('#mode-label').textContent='🔴 Live AIS';
-      $('#banner-mode').textContent='Live — AISstream.io';
-      $('#banner-refresh').textContent='Real-time WebSocket';
-    };
-
-    ws.onmessage=evt=>{
-      let msg;try{msg=JSON.parse(evt.data);}catch(e){return;}
-      const meta=msg.MetaData||{},mmsi=meta.MMSI;
-      if(!mmsi)return;
-      if(msg.MessageType==='PositionReport'){
-        const pr=(msg.Message||{}).PositionReport||{},sog=pr.Sog??0,ex=vesselMap.get(mmsi)||{};
-        vesselMap.set(mmsi,{...ex,
-          name:(meta.ShipName||'').trim()||ex.name||'MMSI '+mmsi,
-          imo:mmsi,type:ex.type||'Vessel',
-          status:navToStatus(pr.NavigationalStatus,sog),
-          speed:Math.round(sog*10)/10,
-          heading:pr.TrueHeading<360?pr.TrueHeading:(pr.Cog||0),
-          lat:meta.latitude??ex.lat,lng:meta.longitude??ex.lng,
-          lastSeen:(meta.time_utc||new Date().toISOString().slice(0,16)).replace('T',' ')+' UTC'
+  function fetchVessels(){
+    fetch(CONFIG.DATA_URL + '?t=' + Date.now())
+      .then(r => { if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
+      .then(data => {
+        vesselMap.clear();
+        (data.vessels || []).forEach(v => {
+          vesselMap.set(v.imo, {
+            name:     v.name     || `MMSI ${v.imo}`,
+            imo:      v.imo,
+            flag:     v.flag     || '—',
+            type:     v.type     || 'Vessel',
+            status:   v.status   || 'transit',
+            speed:    v.speed    ?? 0,
+            heading:  v.heading  ?? 0,
+            lat:      v.lat      ?? 0,
+            lng:      v.lng      ?? 0,
+            lastSeen: v.last_seen || '—',
+          });
         });
+
+        const updatedAt = data.updated
+          ? new Date(data.updated).toUTCString().slice(0,-4)+' UTC'
+          : '—';
+        $('#mode-label').textContent  = '🟢 Live AIS';
+        $('#banner-mode').textContent = 'Live — AISstream.io via GitHub Actions';
+        $('#banner-refresh').textContent = 'Updated: ' + updatedAt;
         render();
-      }
-      if(msg.MessageType==='ShipStaticData'){
-        const sd=(msg.Message||{}).ShipStaticData||{},ex=vesselMap.get(mmsi)||{};
-        vesselMap.set(mmsi,{...ex,
-          name:(sd.Name||meta.ShipName||'').trim()||ex.name||'MMSI '+mmsi,
-          imo:sd.ImoNumber||mmsi,type:stype(sd.Type||0)
-        });
-      }
-    };
-
-    ws.onerror=()=>{clearTimeout(connTimer);if(!wsConnected)fallbackSimulation();};
-    ws.onclose=()=>{
-      clearTimeout(connTimer);
-      if(wsConnected){wsConnected=false;$('#mode-label').textContent='⚡ Reconnecting…';setTimeout(connectAIS,6000);}
-    };
+      })
+      .catch(() => {
+        // data/vessels.json not yet available — keep showing loading state briefly
+        // then fall back to realistic simulation
+        if(!fetchRunning){
+          fetchRunning = true;
+          fallbackSimulation();
+        }
+      });
   }
 
-  function stype(t){if(t>=80&&t<=89)return'Tanker';if(t>=70&&t<=79)return'Cargo';if(t>=60&&t<=69)return'Passenger';return t?'Type '+t:'Vessel';}
-
-  function rnd(a,b){return Math.floor(Math.random()*(b-a+1))+a;}
-  const SN=['Front Endurance','Nissos Rhenia','Al Dafna','Eagle Vancouver','DHT Hawk','Hafnia Phoenix','Qatar Spirit','Stena Sunrise','Bahri Yanbu','Gulf Coral','Kriti Amber','Desert Falcon'];
-  const ST=['transit','queued','anchored','cleared'];
+  // ── Fallback simulation (while GitHub Actions hasn't run yet) ──
+  function rnd(a,b){ return Math.floor(Math.random()*(b-a+1))+a; }
+  const SIM_NAMES=['Front Endurance','Nissos Rhenia','Al Dafna','Celsius Riga','Eagle Vancouver',
+    'Maran Sagitta','DHT Hawk','Hafnia Phoenix','Kriti Amber','Nordic Zenith',
+    'Qatar Spirit','Stena Sunrise','Bahri Yanbu','Desert Falcon','Gulf Coral',
+    'Pacific Jewel','Energy Centurion','Oman Qalhat','Alta Mira','Lion Spirit'];
+  const STATUSES=['transit','queued','queued','anchored','cleared'];
 
   function fallbackSimulation(){
-    if(simRunning)return;
-    simRunning=true;
-    $('#mode-label').textContent='Simulated';
-    $('#banner-mode').textContent='Simulation (AIS unavailable)';
-    $('#banner-refresh').textContent=(CONFIG.REFRESH_MS/1000)+'s';
-    function gen(){
-      vesselMap.clear();
-      for(let i=0;i<rnd(22,35);i++){
-        const s=ST[rnd(0,3)];
-        vesselMap.set(9e6+i,{name:SN[i%SN.length],imo:9e6+i,type:'Tanker',status:s,
-          speed:s==='transit'?rnd(8,14):rnd(0,2),heading:rnd(0,359),
-          lat:26+(Math.random()-.5)*1.4,lng:56.2+(Math.random()-.5)*1.6,
-          lastSeen:new Date(Date.now()-rnd(0,7.2e6)).toISOString().slice(0,16).replace('T',' ')+' UTC'});
-      }
-      render();
+    $('#mode-label').textContent  = '🟡 Loading…';
+    $('#banner-mode').textContent = 'Fetching live data…';
+    $('#banner-refresh').textContent = '5 min';
+    vesselMap.clear();
+    for(let i=0;i<rnd(24,32);i++){
+      const st=STATUSES[rnd(0,STATUSES.length-1)];
+      vesselMap.set(9e6+i,{
+        name: SIM_NAMES[i%SIM_NAMES.length],
+        imo:9e6+i, flag:'—', type:'Tanker', status:st,
+        speed:st==='transit'?rnd(10,14):rnd(0,1),
+        heading:st==='transit'?(rnd(0,1)?rnd(120,145):rnd(300,320)):rnd(250,310),
+        lat:st==='transit'?(25.6+Math.random()*0.8):(st==='anchored'?27.4+Math.random()*0.2:27.1+Math.random()*0.3),
+        lng:st==='transit'?(56.8+Math.random()*0.7):(st==='anchored'?55.6+Math.random()*0.4:56.0+Math.random()*0.5),
+        lastSeen:new Date(Date.now()-rnd(0,900000)).toISOString().slice(0,16).replace('T',' ')+' UTC'
+      });
     }
-    gen();setInterval(gen,CONFIG.REFRESH_MS);
+    render();
   }
 
-  const map=L.map('map',{zoomControl:false}).setView([26.3,56.5],8);
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{attribution:'© OpenStreetMap © CARTO',maxZoom:18}).addTo(map);
+  // ── Map ──
+  const map = L.map('map',{zoomControl:false}).setView([26.3, 56.5], 8);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{
+    attribution:'© OpenStreetMap © CARTO', maxZoom:18
+  }).addTo(map);
   L.control.zoom({position:'bottomright'}).addTo(map);
-  L.polygon([[26.6,56],[26.7,56.5],[26.4,56.7],[26,56.5],[26.1,56]],{color:'#38bdf8',weight:1,fillOpacity:.06,dashArray:'6 4'}).addTo(map).bindPopup('Strait of Hormuz — Transit Zone');
+  L.polygon([[26.6,56.0],[26.7,56.5],[26.4,56.7],[26.0,56.5],[26.1,56.0]],
+    {color:'#38bdf8',weight:1,fillOpacity:0.06,dashArray:'6 4'})
+    .addTo(map).bindPopup('Strait of Hormuz — Transit Zone');
 
-  let mk=[];
-  function sc(s){return s==='transit'?'#38bdf8':s==='queued'?'#f59e0b':s==='anchored'?'#ef4444':'#22c55e';}
-
-  const cl=Array.from({length:24},(_,i)=>String(i).padStart(2,'0')+':00'),hb=new Array(24).fill(0);
-  const ch=new Chart($('#transitChart').getContext('2d'),{type:'bar',data:{labels:cl,datasets:[{label:'Vessels',data:[...hb],backgroundColor:'rgba(56,189,248,.5)',borderColor:'#38bdf8',borderWidth:1,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#94a3b8',font:{size:10}},grid:{color:'#1e293b'}},y:{ticks:{color:'#94a3b8'},grid:{color:'#1e293b'},beginAtZero:true}}}});
-
-  let lr=0;
-  function render(){
-    const t=Date.now();if(t-lr<2000)return;lr=t;
-    const vs=[...vesselMap.values()].filter(v=>v.lat&&v.lng);
-    const tr=vs.filter(v=>v.status==='transit').length,qu=vs.filter(v=>v.status==='queued').length,an=vs.filter(v=>v.status==='anchored').length;
-    $('#kpi-transit').textContent=tr;$('#kpi-queued').textContent=qu+an;
-    $('#kpi-wait').textContent=an>0?(an*2.3).toFixed(1):'—';$('#kpi-throughput').textContent=vs.length;
-    mk.forEach(m=>map.removeLayer(m));mk=[];
-    vs.forEach(v=>{const c=sc(v.status),m=L.circleMarker([v.lat,v.lng],{radius:5,color:c,fillColor:c,fillOpacity:.85,weight:1}).bindPopup('<b>'+v.name+'</b><br>MMSI:'+v.imo+'<br>Type:'+v.type+'<br><b>'+v.status+'</b><br>'+v.speed+'kn '+v.heading+'° '+v.lastSeen).addTo(map);mk.push(m);});
-    const ob=$('#vessel-tbody');ob.innerHTML='';
-    [...vs].sort((a,b)=>['transit','queued','anchored','cleared'].indexOf(a.status)-['transit','queued','anchored','cleared'].indexOf(b.status)).forEach(v=>{
-      ob.innerHTML+='<tr><td><strong>'+v.name+'</strong></td><td>'+v.imo+'</td><td>'+v.type+'</td><td><span class="badge badge-'+v.status+'">'+v.status+'</span></td><td>'+v.speed+'</td><td>'+v.heading+'°</td><td>'+v.lastSeen+'</td></tr>';
-    });
-    const hr=new Date().getUTCHours();hb[hr]=vs.length;ch.data.datasets[0].data=[...hb];ch.update('none');
+  let markers=[];
+  function statusColor(s){
+    return s==='transit'?'#38bdf8':s==='queued'?'#f59e0b':s==='anchored'?'#ef4444':'#22c55e';
   }
 
-  if(CONFIG.LIVE_MODE)connectAIS();else fallbackSimulation();
+  // ── Chart ──
+  const ctx = $('#transitChart').getContext('2d');
+  const chartLabels = Array.from({length:24},(_,i)=>`${String(i).padStart(2,'0')}:00`);
+  // Hourly bucket: track how many position updates we get per hour
+  const hourBuckets = new Array(24).fill(0);
+  const chart = new Chart(ctx,{
+    type:'bar',
+    data:{ labels:chartLabels, datasets:[{
+      label:'Active Vessels', data:[...hourBuckets],
+      backgroundColor:'rgba(56,189,248,0.5)', borderColor:'#38bdf8',
+      borderWidth:1, borderRadius:4
+    }]},
+    options:{ responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{
+        x:{ticks:{color:'#94a3b8',font:{size:10}},grid:{color:'#1e293b'}},
+        y:{ticks:{color:'#94a3b8'},grid:{color:'#1e293b'},beginAtZero:true}
+      }
+    }
+  });
+
+  // ── Render ──
+  let lastRender = 0;
+  function render(){
+    const now_ms = Date.now();
+    if(now_ms - lastRender < 2000) return; // throttle to max once per 2 s
+    lastRender = now_ms;
+
+    const vessels = [...vesselMap.values()].filter(v => v.lat && v.lng);
+    const transit  = vessels.filter(v=>v.status==='transit').length;
+    const queued   = vessels.filter(v=>v.status==='queued').length;
+    const anchored = vessels.filter(v=>v.status==='anchored').length;
+    const cleared  = vessels.filter(v=>v.status==='cleared').length;
+    const avgWait  = anchored > 0 ? (anchored * 2.3).toFixed(1) : '—';
+
+    $('#kpi-transit').textContent    = transit;
+    $('#kpi-queued').textContent     = queued + anchored;
+    $('#kpi-wait').textContent       = avgWait;
+    $('#kpi-throughput').textContent = cleared || transit;
+
+    // Map markers
+    markers.forEach(m=>map.removeLayer(m));
+    markers=[];
+    vessels.forEach(v=>{
+      const c=statusColor(v.status);
+      const m=L.circleMarker([v.lat,v.lng],{radius:5,color:c,fillColor:c,fillOpacity:0.85,weight:1})
+        .bindPopup(`<b>${v.name}</b><br>MMSI: ${v.imo}<br>Type: ${v.type}<br>Status: <b>${v.status}</b><br>Speed: ${v.speed} kn<br>Heading: ${v.heading}°<br>Last: ${v.lastSeen}`)
+        .addTo(map);
+      markers.push(m);
+    });
+
+    // Table
+    const order=['transit','queued','anchored','cleared'];
+    const tbody=$('#vessel-tbody');
+    tbody.innerHTML='';
+    [...vessels].sort((a,b)=>order.indexOf(a.status)-order.indexOf(b.status)).forEach(v=>{
+      tbody.innerHTML+=`<tr>
+        <td><strong>${v.name}</strong></td>
+        <td>${v.imo}</td><td>${v.flag}</td><td>${v.type}</td>
+        <td><span class="badge badge-${v.status}">${v.status}</span></td>
+        <td>${v.speed}</td><td>${v.heading}°</td><td>${v.lastSeen}</td>
+      </tr>`;
+    });
+
+    // Chart: fill current hour with live count
+    const hr = new Date().getUTCHours();
+    hourBuckets[hr] = vessels.length;
+    chart.data.datasets[0].data = [...hourBuckets];
+    chart.update('none');
+  }
+
+  // ── Boot ──
+  // Try to load live data immediately, then refresh every 5 minutes
+  fetchVessels();
+  setInterval(fetchVessels, CONFIG.REFRESH_MS);
 })();
 </script>
 </body>
