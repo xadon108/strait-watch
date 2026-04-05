@@ -26,7 +26,13 @@
   @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
   /* Config banner */
-  #config-banner { background: #1e293b; padding: 0.5rem 2rem; font-size: 0.8rem; color: var(--muted); border-bottom: 1px solid var(--border); display: flex; gap: 2rem; flex-wrap:wrap; }
+  #config-banner { background: #1e293b; padding: 0.5rem 2rem; font-size: 0.8rem; color: var(--muted); border-bottom: 1px solid var(--border); display: flex; gap: 1.5rem; flex-wrap:wrap; align-items:center; }
+  #ais-key-row { display:flex; align-items:center; gap:0.5rem; }
+  #ais-key-field { background:#0b1120; border:1px solid #334155; color:#e2e8f0; border-radius:4px; padding:3px 8px; font-size:0.75rem; width:210px; outline:none; }
+  #ais-key-field:focus { border-color: var(--accent); }
+  #ais-connect-btn { background:var(--accent); color:#0b1120; border:none; border-radius:4px; padding:3px 10px; font-size:0.75rem; cursor:pointer; font-weight:700; transition:opacity 0.2s; }
+  #ais-connect-btn:hover { opacity:0.85; }
+  #ais-status { font-weight:600; }
 
   /* Threat banner */
   #threat-banner { background: linear-gradient(90deg, rgba(239,68,68,0.1), rgba(239,68,68,0.05)); border-bottom: 2px solid #ef4444; padding: 0.75rem 2rem; font-size: 0.9rem; color: #fca5a5; font-weight: 600; display: none; }
@@ -261,7 +267,9 @@
   const CONFIG = {
     LIVE_MODE:     false,
     SHEET_CSV_URL: '',
-    REFRESH_MS:    300000,
+    // aisstream.io free WebSocket key — entered via UI or set here
+    AISSTREAM_KEY: (function(){ try{ return localStorage.getItem('ais_key')||''; }catch(e){ return ''; } })(),
+    REFRESH_MS:    30000,   // 30s UI refresh; AIS data streams in real-time via WebSocket
     DEADLINE:      '2026-04-06T20:00:00-04:00',
   };
 
@@ -307,6 +315,12 @@
   <span>Mode: <strong id="banner-mode">Simulation</strong></span>
   <span>Refresh: <strong id="banner-refresh">—</strong></span>
   <span>Crisis: <strong>US–Iran standoff (April 2026)</strong></span>
+  <span id="ais-status" style="color:#94a3b8">AIS: Not connected</span>
+  <span id="ais-key-row">
+    🔑 <input id="ais-key-field" type="password" placeholder="Paste aisstream.io API key for live data…" autocomplete="off">
+    <button id="ais-connect-btn" onclick="window.connectAIS()">Connect</button>
+    <a href="https://aisstream.io" target="_blank" rel="noopener" style="color:var(--accent);font-size:0.75rem;white-space:nowrap;">Get free key →</a>
+  </span>
 </div>
 
 <div id="threat-banner">⚠️ Threat activity reported near key energy/shipping targets (based on public sources).</div>
@@ -556,6 +570,119 @@
         };
       });
     } catch(e) { console.warn('CSV fetch failed, falling back to simulation', e); return null; }
+  }
+
+
+  // ── AIS Stream (aisstream.io WebSocket) ──
+  // Free real-time AIS data for the Strait of Hormuz
+  // Sign up at https://aisstream.io to get a free API key
+
+  const aisCache = new Map();   // MMSI → vessel object (live data)
+  let aisSocket = null;
+  let aisConnected = false;
+  let aisReconnectTimer = null;
+
+  function shipTypeToLabel(t){
+    t = parseInt(t) || 0;
+    if(t === 84) return 'LNG Carrier';
+    if(t === 81 || t === 82) return 'Product Tanker';
+    if(t >= 80 && t <= 89) return 'VLCC/Tanker';
+    if(t >= 70 && t <= 79) return 'Cargo';
+    if(t >= 60 && t <= 69) return 'Passenger';
+    if(t >= 30 && t <= 32) return 'Tug/Tow';
+    return 'Vessel';
+  }
+
+  function navStatusToStatus(code){
+    if(code === 1 || code === 5 || code === 6) return 'anchored';
+    if(code === 0 || code === 2 || code === 3 || code === 8) return 'transit';
+    return 'queued';
+  }
+
+  function flagFromMmsi(mmsi){
+    const mid = String(mmsi).substring(0,3);
+    return ({'403':'\u{1F1F8}\u{1F1E6} SAU','422':'\u{1F1EE}\u{1F1F7} IRN','470':'\u{1F1E6}\u{1F1EA} UAE','447':'\u{1F1F0}\u{1F1FC} KWT','425':'\u{1F1EE}\u{1F1F6} IRQ','466':'\u{1F1F6}\u{1F1E6} QAT','419':'\u{1F1EE}\u{1F1F3} IND','413':'\u{1F1E8}\u{1F1F3} CHN','239':'\u{1F1EC}\u{1F1F7} GRC','240':'\u{1F1EC}\u{1F1F7} GRC','431':'\u{1F1EF}\u{1F1F5} JPN','432':'\u{1F1EF}\u{1F1F5} JPN','440':'\u{1F1F0}\u{1F1F7} KOR','441':'\u{1F1F0}\u{1F1F7} KOR','257':'\u{1F1F3}\u{1F1F4} NOR','636':'\u{1F1F1}\u{1F1F7} LBR','538':'\u{1F1F2}\u{1F1ED} MHL','351':'\u{1F1F5}\u{1F1E6} PAN','352':'\u{1F1F5}\u{1F1E6} PAN','371':'\u{1F1F5}\u{1F1E6} PAN','374':'\u{1F1F5}\u{1F1E6} PAN'})[mid] || '\u{1F310} INTL';
+  }
+
+  function updateAISStatus(state){
+    const el = $('#ais-status');
+    if(!el) return;
+    const count = aisCache.size;
+    if(state === 'live'){
+      el.textContent = '\u{1F7E2} AIS LIVE \u00B7 ' + count + ' vessel' + (count!==1?'s':'');
+      el.style.color = '#22c55e';
+    } else if(state === 'connecting'){
+      el.textContent = '\u23F3 AIS connecting\u2026';
+      el.style.color = '#f59e0b';
+    } else if(state === 'error'){
+      el.textContent = '\u26A0\uFE0F AIS connection failed';
+      el.style.color = '#ef4444';
+    } else if(state === 'disconnected'){
+      el.textContent = '\u{1F534} AIS disconnected \u2014 reconnecting\u2026';
+      el.style.color = '#ef4444';
+    } else {
+      el.textContent = 'AIS: Not connected';
+      el.style.color = '#94a3b8';
+    }
+  }
+
+  function startAISStream(apiKey){
+    if(!apiKey) return;
+    if(aisReconnectTimer){ clearTimeout(aisReconnectTimer); aisReconnectTimer = null; }
+    if(aisSocket){ aisSocket.onclose = null; aisSocket.close(); aisSocket = null; }
+    aisConnected = false;
+    updateAISStatus('connecting');
+    try {
+      aisSocket = new WebSocket('wss://stream.aisstream.io/v0/stream');
+      aisSocket.onopen = () => {
+        const sub = { APIkey: apiKey, BoundingBoxes: [[[24.0, 55.0], [28.0, 61.0]]], FilterMessageTypes: ['PositionReport', 'ShipStaticData'] };
+        aisSocket.send(JSON.stringify(sub));
+        updateAISStatus('connecting');
+      };
+      aisSocket.onmessage = (event) => {
+        try {
+          const msg = JSON.parse(event.data);
+          const meta = msg.MetaData || {};
+          const mmsi = meta.MMSI || meta.MMSI_String;
+          if(!mmsi) return;
+          const existing = aisCache.get(mmsi) || { imo: mmsi, flag: flagFromMmsi(mmsi), type: 'Vessel', status: 'transit', speed: 0, heading: 0, lat: 26.2, lng: 56.2 };
+          if(msg.MessageType === 'PositionReport'){
+            const pos = msg.Message.PositionReport;
+            const lat = pos.Latitude; const lng = pos.Longitude;
+            if(lat < 22 || lat > 30 || lng < 53 || lng > 63) return;
+            aisCache.set(mmsi, { ...existing, name: ((meta.ShipName || existing.name || '')).trim() || ('MMSI ' + mmsi), lat, lng, speed: Math.round((pos.Sog || 0) * 10) / 10, heading: pos.TrueHeading < 360 ? pos.TrueHeading : (pos.Cog || 0), status: navStatusToStatus(pos.NavigationalStatus), lastSeen: new Date().toISOString().slice(0,16).replace('T',' ') + ' UTC' });
+            if(!aisConnected){ aisConnected = true; }
+            updateAISStatus('live');
+          } else if(msg.MessageType === 'ShipStaticData'){
+            const sd = msg.Message.ShipStaticData || {};
+            aisCache.set(mmsi, { ...existing, name: ((sd.Name || meta.ShipName || existing.name || '')).trim() || ('MMSI ' + mmsi), type: shipTypeToLabel(sd.Type), imo: sd.ImoNumber || existing.imo || mmsi });
+          }
+        } catch(e){}
+      };
+      aisSocket.onerror = () => { aisConnected = false; updateAISStatus('error'); };
+      aisSocket.onclose = () => {
+        aisConnected = false; updateAISStatus('disconnected');
+        aisReconnectTimer = setTimeout(() => { if(CONFIG.AISSTREAM_KEY) startAISStream(CONFIG.AISSTREAM_KEY); }, 15000);
+      };
+    } catch(e){ console.error('AIS error:', e); updateAISStatus('error'); }
+  }
+
+  window.connectAIS = function(){
+    const input = document.getElementById('ais-key-field');
+    const key = (input ? input.value : '').trim();
+    if(!key){ alert('Paste your aisstream.io API key first.\n\nGet one free at https://aisstream.io'); return; }
+    CONFIG.AISSTREAM_KEY = key;
+    try{ localStorage.setItem('ais_key', key); } catch(e){}
+    aisCache.clear(); startAISStream(key);
+    if(input) input.value = '';
+    const btn = document.getElementById('ais-connect-btn');
+    if(btn){ btn.textContent = '\u2713 Saved'; setTimeout(() => btn.textContent = 'Connect', 2000); }
+  };
+
+  if(CONFIG.AISSTREAM_KEY){
+    const kf = document.getElementById('ais-key-field');
+    if(kf) kf.placeholder = '\u2713 Key loaded from storage';
+    startAISStream(CONFIG.AISSTREAM_KEY);
   }
 
   // ── Map Setup ──
@@ -861,18 +988,31 @@
   // ── Main Loop ──
   async function update(){
     let vessels;
-    if(CONFIG.LIVE_MODE && CONFIG.SHEET_CSV_URL){
-      vessels = await fetchLiveData();
-      if(vessels){
+
+    // Priority 1 — real-time AIS WebSocket cache
+    if(aisCache.size > 0){
+      vessels = Array.from(aisCache.values()).filter(v => v.lat && v.lng);
+      $('#mode-label').textContent = 'Live AIS';
+      $('#banner-mode').textContent = 'Live AIS (' + vessels.length + ' vessels)';
+    }
+
+    // Priority 2 — Google Sheet CSV
+    if((!vessels || vessels.length === 0) && CONFIG.LIVE_MODE && CONFIG.SHEET_CSV_URL){
+      const csvData = await fetchLiveData();
+      if(csvData && csvData.length > 0){
+        vessels = csvData;
         $('#mode-label').textContent = 'Live AIS';
         $('#banner-mode').textContent = 'Live (Google Sheet)';
       }
     }
-    if(!vessels){
+
+    // Priority 3 — simulation fallback
+    if(!vessels || vessels.length === 0){
       vessels = generateVessels();
       $('#mode-label').textContent = 'Simulated';
       $('#banner-mode').textContent = 'Simulation';
     }
+
     $('#banner-refresh').textContent = (CONFIG.REFRESH_MS/1000)+'s';
     render(vessels);
   }
