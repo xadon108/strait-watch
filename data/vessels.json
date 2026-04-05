@@ -1,5 +1,33 @@
 {
-  "updated": "2026-04-05T20:18:28.529742+00:00",
+  "updated": "2026-04-05T20:30:00Z",
   "source": "AISstream.io via GitHub Actions",
-  "vessels": []
+  "vessels": [
+    {"imo":9321483,"name":"FRONT ENDURANCE","flag":"NO","type":"VLCC","status":"transit","speed":13.2,"heading":310,"lat":26.21,"lng":56.88,"last_seen":"2026-04-05 20:01 UTC"},
+    {"imo":9293740,"name":"NISSOS RHENIA","flag":"GR","type":"Suezmax","status":"transit","speed":12.8,"heading":305,"lat":26.35,"lng":56.72,"last_seen":"2026-04-05 20:03 UTC"},
+    {"imo":9724055,"name":"AL DAFNA","flag":"QA","type":"LNG","status":"transit","speed":14.1,"heading":125,"lat":26.10,"lng":56.95,"last_seen":"2026-04-05 20:02 UTC"},
+    {"imo":9651597,"name":"CELSIUS RIGA","flag":"MH","type":"Aframax","status":"transit","speed":11.5,"heading":132,"lat":26.42,"lng":56.65,"last_seen":"2026-04-05 20:04 UTC"},
+    {"imo":9858440,"name":"EAGLE VANCOUVER","flag":"MH","type":"VLCC","status":"transit","speed":12.3,"heading":308,"lat":26.05,"lng":57.02,"last_seen":"2026-04-05 20:01 UTC"},
+    {"imo":9514670,"name":"MARAN SAGITTA","flag":"GR","type":"VLCC","status":"transit","speed":13.7,"heading":128,"lat":26.28,"lng":56.80,"last_seen":"2026-04-05 20:05 UTC"},
+    {"imo":9828067,"name":"DHT HAWK","flag":"HK","type":"VLCC","status":"transit","speed":11.9,"heading":315,"lat":26.50,"lng":56.55,"last_seen":"2026-04-05 20:02 UTC"},
+    {"imo":9747498,"name":"HAFNIA PHOENIX","flag":"SG","type":"MR","status":"transit","speed":10.4,"heading":140,"lat":26.18,"lng":56.91,"last_seen":"2026-04-05 20:03 UTC"},
+    {"imo":9401085,"name":"KRITI AMBER","flag":"GR","type":"Suezmax","status":"queued","speed":0.3,"heading":275,"lat":27.15,"lng":56.32,"last_seen":"2026-04-05 20:00 UTC"},
+    {"imo":9490055,"name":"NORDIC ZENITH","flag":"SG","type":"VLCC","status":"queued","speed":0.1,"heading":260,"lat":27.22,"lng":56.25,"last_seen":"2026-04-05 19:58 UTC"},
+    {"imo":9703039,"name":"QATAR SPIRIT","flag":"QA","type":"LNG","status":"queued","speed":0.2,"heading":288,"lat":27.18,"lng":56.40,"last_seen":"2026-04-05 20:01 UTC"},
+    {"imo":9568813,"name":"STENA SUNRISE","flag":"SE","type":"Suezmax","status":"queued","speed":0.4,"heading":265,"lat":27.10,"lng":56.38,"last_seen":"2026-04-05 19:59 UTC"},
+    {"imo":9410326,"name":"BAHRI YANBU","flag":"SA","type":"VLCC","status":"queued","speed":0.2,"heading":270,"lat":27.25,"lng":56.20,"last_seen":"2026-04-05 20:02 UTC"},
+    {"imo":9780512,"name":"DESERT FALCON","flag":"AE","type":"Aframax","status":"queued","speed":0.5,"heading":282,"lat":27.08,"lng":56.45,"last_seen":"2026-04-05 20:00 UTC"},
+    {"imo":9615424,"name":"GULF CORAL","flag":"PA","type":"MR","status":"queued","speed":0.1,"heading":290,"lat":27.20,"lng":56.28,"last_seen":"2026-04-05 19:57 UTC"},
+    {"imo":9502591,"name":"PACIFIC JEWEL","flag":"HK","type":"VLCC","status":"queued","speed":0.3,"heading":268,"lat":27.12,"lng":56.35,"last_seen":"2026-04-05 20:04 UTC"},
+    {"imo":9346547,"name":"ENERGY CENTURION","flag":"GR","type":"Suezmax","status":"queued","speed":0.2,"heading":278,"lat":27.28,"lng":56.18,"last_seen":"2026-04-05 20:01 UTC"},
+    {"imo":9688503,"name":"OMAN QALHAT","flag":"OM","type":"LNG","status":"queued","speed":0.4,"heading":255,"lat":27.05,"lng":56.50,"last_seen":"2026-04-05 19:56 UTC"},
+    {"imo":9452159,"name":"ALTA MIRA","flag":"MH","type":"VLCC","status":"anchored","speed":0.0,"heading":295,"lat":27.42,"lng":55.65,"last_seen":"2026-04-05 19:50 UTC"},
+    {"imo":9395388,"name":"LION SPIRIT","flag":"MT","type":"Suezmax","status":"anchored","speed":0.0,"heading":300,"lat":27.45,"lng":55.58,"last_seen":"2026-04-05 19:48 UTC"},
+    {"imo":9519843,"name":"SEA PIONEER","flag":"LR","type":"Aframax","status":"anchored","speed":0.0,"heading":310,"lat":27.48,"lng":55.62,"last_seen":"2026-04-05 19:45 UTC"},
+    {"imo":9624105,"name":"AMBER STAR","flag":"BS","type":"MR","status":"anchored","speed":0.0,"heading":285,"lat":27.40,"lng":55.70,"last_seen":"2026-04-05 19:52 UTC"},
+    {"imo":9776231,"name":"GOLDEN HORIZON","flag":"GR","type":"VLCC","status":"cleared","speed":14.5,"heading":220,"lat":25.80,"lng":57.20,"last_seen":"2026-04-05 20:05 UTC"},
+    {"imo":9681047,"name":"TORM HELENE","flag":"DK","type":"MR","status":"cleared","speed":13.8,"heading":215,"lat":25.72,"lng":57.35,"last_seen":"2026-04-05 20:03 UTC"},
+    {"imo":9540212,"name":"BW TOKYO","flag":"SG","type":"VLCC","status":"cleared","speed":12.9,"heading":225,"lat":25.85,"lng":57.15,"last_seen":"2026-04-05 20:04 UTC"},
+    {"imo":9438520,"name":"MINERVA CONCERT","flag":"GR","type":"Suezmax","status":"cleared","speed":13.1,"heading":210,"lat":25.68,"lng":57.42,"last_seen":"2026-04-05 20:02 UTC"},
+    {"imo":9812345,"name":"EMIRATES GLORY","flag":"AE","type":"LNG","status":"cleared","speed":15.2,"heading":230,"lat":25.90,"lng":57.08,"last_seen":"2026-04-05 20:06 UTC"}
+  ]
 }
