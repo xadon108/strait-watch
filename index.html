@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Strait Watch â Live Hormuz Tanker Tracker</title>
+<title>Strait Watch — Live Hormuz Tanker Tracker</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -109,7 +109,7 @@
   .badge-cleared { background:rgba(34,197,94,0.15); color:var(--ok); }
   .scroll-table { max-height:400px; overflow-y:auto; }
 
-  /* ââ DAYS UNTIL DARK panel ââ */
+  /* ── DAYS UNTIL DARK panel ── */
   .dark-panel { grid-column: 1 / -1; }
   .dark-panel .panel-title { color: #fca5a5; }
   .dark-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap:0.75rem; padding:1rem; }
@@ -164,80 +164,80 @@
   // Countries for "Days Until Dark" panel
   // baseReserve = strategic + commercial reserve in days of import at normal flow
   const RESERVE_COUNTRIES = [
-    { code:'NL', name:'Netherlands', flag:'ð³ð±', baseReserve:45 },
-    { code:'DE', name:'Germany',     flag:'ð©ðª', baseReserve:90 },
-    { code:'UK', name:'United Kingdom',flag:'ð¬ð§', baseReserve:50 },
-    { code:'FR', name:'France',      flag:'ð«ð·', baseReserve:85 },
-    { code:'IT', name:'Italy',       flag:'ð®ð¹', baseReserve:70 },
-    { code:'JP', name:'Japan',       flag:'ð¯ðµ', baseReserve:120 },
-    { code:'KR', name:'South Korea', flag:'ð°ð·', baseReserve:95 },
-    { code:'IN', name:'India',       flag:'ð®ð³', baseReserve:65 },
-    { code:'CN', name:'China',       flag:'ð¨ð³', baseReserve:80 },
-    { code:'US', name:'United States',flag:'ðºð¸', baseReserve:150 },
+    { code:'NL', name:'Netherlands', flag:'🇳🇱', baseReserve:45 },
+    { code:'DE', name:'Germany',     flag:'🇩🇪', baseReserve:90 },
+    { code:'UK', name:'United Kingdom',flag:'🇬🇧', baseReserve:50 },
+    { code:'FR', name:'France',      flag:'🇫🇷', baseReserve:85 },
+    { code:'IT', name:'Italy',       flag:'🇮🇹', baseReserve:70 },
+    { code:'JP', name:'Japan',       flag:'🇯🇵', baseReserve:120 },
+    { code:'KR', name:'South Korea', flag:'🇰🇷', baseReserve:95 },
+    { code:'IN', name:'India',       flag:'🇮🇳', baseReserve:65 },
+    { code:'CN', name:'China',       flag:'🇨🇳', baseReserve:80 },
+    { code:'US', name:'United States',flag:'🇺🇸', baseReserve:150 },
   ];
 </script>
 
 <header>
-  <h1>ð¢ï¸ <span>Strait Watch</span> â Hormuz Tanker Tracker</h1>
+  <h1>🛢️ <span>Strait Watch</span> — Hormuz Tanker Tracker</h1>
   <div class="header-meta">
-    <span><span class="live-dot"></span> <span id="mode-label">Loadingâ¦</span></span>
+    <span><span class="live-dot"></span> <span id="mode-label">Loading…</span></span>
     <span id="clock"></span>
     <div class="action-btns">
-      <a class="btn-alerts" href="https://hormuzpulse.substack.com" target="_blank" rel="noopener">ð§ Get email alerts</a>
-      <a class="btn-support" href="https://ko-fi.com/hormuzpulse" target="_blank" rel="noopener">â Support this project</a>
-      <a class="btn-alerts" href="https://calendly.com/wail-emad/30min" target="_blank" rel="noopener">ð¼ Book consulting</a>
+      <a class="btn-alerts" href="https://hormuzpulse.substack.com" target="_blank" rel="noopener">📧 Get email alerts</a>
+      <a class="btn-support" href="https://ko-fi.com/hormuzpulse" target="_blank" rel="noopener">☕ Support this project</a>
+      <a class="btn-alerts" href="https://calendly.com/wail-emad/30min" target="_blank" rel="noopener">💼 Book consulting</a>
     </div>
   </div>
 </header>
 
 <!-- COUNTDOWN BANNER -->
 <div id="countdown-banner">
-  <div class="cd-label">â° TIME UNTIL US DEADLINE TO STRIKE IRAN'S ENERGY FLEET</div>
+  <div class="cd-label">⏰ TIME UNTIL US DEADLINE TO STRIKE IRAN'S ENERGY FLEET</div>
   <div class="cd-timer" id="cd-timer">--d --h --m --s</div>
 </div>
 
 <div id="config-banner">
-  <span>Mode: <strong id="banner-mode">Loadingâ¦</strong></span>
-  <span>Feed: <strong id="banner-refresh">â</strong></span>
+  <span>Mode: <strong id="banner-mode">Loading…</strong></span>
+  <span>Feed: <strong id="banner-refresh">—</strong></span>
   <span>Brent: <strong id="banner-brent">$--</strong></span>
 </div>
 
-<!-- KPI Cards â headline row: Transit, Queue, Avg Speed, Brent -->
+<!-- KPI Cards — headline row: Transit, Queue, Avg Speed, Brent -->
 <div class="kpi-row">
   <div class="kpi blue">
     <div class="kpi-label">Vessels in Transit</div>
-    <div class="kpi-value" id="kpi-transit">â</div>
+    <div class="kpi-value" id="kpi-transit">—</div>
     <div class="kpi-sub">Currently moving through strait</div>
   </div>
   <div class="kpi yellow">
     <div class="kpi-label">Queued / Waiting</div>
-    <div class="kpi-value" id="kpi-queued">â</div>
+    <div class="kpi-value" id="kpi-queued">—</div>
     <div class="kpi-sub">Anchored near approaches</div>
   </div>
   <div class="kpi red">
     <div class="kpi-label">Avg Speed (kn)</div>
-    <div class="kpi-value" id="kpi-speed">â</div>
+    <div class="kpi-value" id="kpi-speed">—</div>
     <div class="kpi-sub">Mean speed of vessels in transit</div>
   </div>
   <div class="kpi green">
     <div class="kpi-label">Brent Crude ($/bbl)</div>
-    <div class="kpi-value" id="kpi-brent">â</div>
+    <div class="kpi-value" id="kpi-brent">—</div>
     <div class="kpi-sub">Global oil benchmark price</div>
   </div>
 </div>
 
 <!-- Secondary stats -->
 <div class="stats-secondary">
-  <div class="stat-mini">â± Avg Wait:<strong id="sec-wait">â</strong></div>
-  <div class="stat-mini">ð¢ 24h Throughput:<strong id="sec-throughput">â</strong></div>
-  <div class="stat-mini">ð Total Tracked:<strong id="sec-total">â</strong></div>
+  <div class="stat-mini">⏱ Avg Wait:<strong id="sec-wait">—</strong></div>
+  <div class="stat-mini">🚢 24h Throughput:<strong id="sec-throughput">—</strong></div>
+  <div class="stat-mini">🌍 Total Tracked:<strong id="sec-total">—</strong></div>
 </div>
 
 <!-- Map + Chart -->
 <div class="main-grid">
   <div class="panel">
     <div class="panel-title">
-      ð Live Vessel Map â Strait of Hormuz
+      📍 Live Vessel Map — Strait of Hormuz
       <div class="traffic-light" id="traffic-light">
         <div class="tl-dot tl-green" id="tl-green"></div>
         <div class="tl-dot tl-yellow" id="tl-yellow"></div>
@@ -247,13 +247,13 @@
     <div id="map"></div>
   </div>
   <div class="panel">
-    <div class="panel-title">ð 24-Hour Transit Volume</div>
+    <div class="panel-title">📊 24-Hour Transit Volume</div>
     <div id="chart-wrap"><canvas id="transitChart"></canvas></div>
   </div>
 
   <!-- Vessel Table -->
   <div class="panel table-wrap">
-    <div class="panel-title">ð¢ Vessel Register</div>
+    <div class="panel-title">🚢 Vessel Register</div>
     <div class="scroll-table">
       <table>
         <thead>
@@ -266,13 +266,13 @@
 
   <!-- DAYS UNTIL DARK -->
   <div class="panel dark-panel">
-    <div class="panel-title">ð¨ Days Until Dark â Oil Reserve Countdown by Country</div>
+    <div class="panel-title">🚨 Days Until Dark — Oil Reserve Countdown by Country</div>
     <div class="dark-grid" id="dark-grid"></div>
   </div>
 </div>
 
 <footer>
-  Built by <a href="#">Strait Watch</a> Â· Live vessel data via <a href="https://aisstream.io" target="_blank" rel="noopener">AISstream.io</a> Â· <a href="https://github.com/xadon108/strait-watch" id="gh-link">GitHub</a>
+  Built by <a href="#">Strait Watch</a> · Live vessel data via <a href="https://aisstream.io" target="_blank" rel="noopener">AISstream.io</a> · <a href="https://github.com/xadon108/strait-watch" id="gh-link">GitHub</a>
 </footer>
 
 <!-- ======================== APP LOGIC ======================== -->
@@ -281,7 +281,7 @@
   const $ = s => document.querySelector(s);
   const now = () => new Date();
 
-  // ââ Countdown Banner (ticks every second) ââ
+  // ── Countdown Banner (ticks every second) ──
   function tickCountdown(){
     const dl = new Date(CONFIG.DEADLINE) - now();
     const el = $('#cd-timer');
@@ -301,13 +301,13 @@
   tickCountdown();
   setInterval(tickCountdown, 1000);
 
-  // ââ Clock ââ
+  // ── Clock ──
   function tickClock(){
     $('#clock').textContent = now().toUTCString().slice(0,-4)+' UTC';
   }
   tickClock(); setInterval(tickClock, 30000);
 
-  // ââ Live Brent price ââ
+  // ── Live Brent price ──
   function updateBrentDisplay(price) {
     CONFIG.BRENT_PRICE = price;
     $('#kpi-brent').textContent = '$' + price.toFixed(2);
@@ -332,7 +332,7 @@
             if (price && price > 0) updateBrentDisplay(price);
           })
           .catch(() => {
-            // Both failed â keep last known price shown already
+            // Both failed — keep last known price shown already
           });
       });
   }
@@ -340,10 +340,10 @@
   fetchBrentPrice();                       // then fetch live price
   setInterval(fetchBrentPrice, 15 * 60 * 1000); // refresh every 15 min
 
-  // ââ Vessel store ââ
+  // ── Vessel store ──
   const vesselMap = new Map();
 
-  // ââ Live data fetch ââ
+  // ── Live data fetch ──
   let fetchRunning = false;
   function fetchVessels(){
     fetch(CONFIG.DATA_URL + '?t=' + Date.now())
@@ -354,23 +354,23 @@
           vesselMap.set(v.imo, {
             name:     v.name     || `MMSI ${v.imo}`,
             imo:      v.imo,
-            flag:     v.flag     || 'â',
+            flag:     v.flag     || '—',
             type:     v.type     || 'Vessel',
             status:   v.status   || 'transit',
             speed:    v.speed    ?? 0,
             heading:  v.heading  ?? 0,
             lat:      v.lat      ?? 0,
             lng:      v.lng      ?? 0,
-            lastSeen: v.last_seen || 'â',
+            lastSeen: v.last_seen || '—',
             photoUrl: v.photoUrl || null,
           });
         });
         if(data.brent) CONFIG.BRENT_PRICE = data.brent;
         const updatedAt = data.updated
           ? new Date(data.updated).toUTCString().slice(0,-4)+' UTC'
-          : 'â';
-        $('#mode-label').textContent  = 'ð¢ Live AIS';
-        $('#banner-mode').textContent = 'Live â AISstream.io via GitHub Actions';
+          : '—';
+        $('#mode-label').textContent  = '🟢 Live AIS';
+        $('#banner-mode').textContent = 'Live — AISstream.io via GitHub Actions';
         $('#banner-refresh').textContent = 'Updated: ' + updatedAt;
         render();
       })
@@ -379,7 +379,7 @@
       });
   }
 
-  // ââ Fallback simulation ââ
+  // ── Fallback simulation ──
   function rnd(a,b){ return Math.floor(Math.random()*(b-a+1))+a; }
   const SIM_NAMES=['Front Endurance','Nissos Rhenia','Al Dafna','Celsius Riga','Eagle Vancouver',
     'Maran Sagitta','DHT Hawk','Hafnia Phoenix','Kriti Amber','Nordic Zenith',
@@ -387,14 +387,14 @@
     'Pacific Jewel','Energy Centurion','Oman Qalhat','Alta Mira','Lion Spirit'];
   const STATUSES=['transit','queued','queued','anchored','cleared'];
   function fallbackSimulation(){
-    $('#mode-label').textContent  = 'ð¡ Loadingâ¦';
-    $('#banner-mode').textContent = 'Fetching live dataâ¦';
+    $('#mode-label').textContent  = '🟡 Loading…';
+    $('#banner-mode').textContent = 'Fetching live data…';
     $('#banner-refresh').textContent = '5 min';
     vesselMap.clear();
     for(let i=0;i<rnd(24,32);i++){
       const st=STATUSES[rnd(0,STATUSES.length-1)];
       vesselMap.set(9e6+i,{
-        name: SIM_NAMES[i%SIM_NAMES.length], imo:9e6+i, flag:'â', type:'Tanker', status:st,
+        name: SIM_NAMES[i%SIM_NAMES.length], imo:9e6+i, flag:'—', type:'Tanker', status:st,
         speed:st==='transit'?rnd(100,140)/10:rnd(0,5)/10,
         heading:st==='transit'?(rnd(0,1)?rnd(120,145):rnd(300,320)):rnd(250,310),
         lat:st==='transit'?(25.6+Math.random()*0.8):(st==='anchored'?27.4+Math.random()*0.2:27.1+Math.random()*0.3),
@@ -406,15 +406,15 @@
     render();
   }
 
-  // ââ Map ââ
+  // ── Map ──
   const map = L.map('map',{zoomControl:false}).setView([26.3, 56.5], 8);
   L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{
-    attribution:'Â© OpenStreetMap Â© CARTO', maxZoom:18
+    attribution:'© OpenStreetMap © CARTO', maxZoom:18
   }).addTo(map);
   L.control.zoom({position:'bottomright'}).addTo(map);
   L.polygon([[26.6,56.0],[26.7,56.5],[26.4,56.7],[26.0,56.5],[26.1,56.0]],
     {color:'#38bdf8',weight:1,fillOpacity:0.06,dashArray:'6 4'})
-    .addTo(map).bindPopup('Strait of Hormuz â Transit Zone');
+    .addTo(map).bindPopup('Strait of Hormuz — Transit Zone');
 
   let markers=[];
   function statusColor(s){
@@ -429,17 +429,17 @@
     html += `<div class="vp-row"><span class="vp-label">Type</span><span>${v.type}</span></div>`;
     html += `<div class="vp-row"><span class="vp-label">Status</span><span><b>${v.status}</b></span></div>`;
     html += `<div class="vp-row"><span class="vp-label">Speed</span><span>${v.speed} kn</span></div>`;
-    html += `<div class="vp-row"><span class="vp-label">Heading</span><span>${v.heading}Â°</span></div>`;
+    html += `<div class="vp-row"><span class="vp-label">Heading</span><span>${v.heading}°</span></div>`;
     html += `<div class="vp-row"><span class="vp-label">Last seen</span><span>${v.lastSeen}</span></div>`;
     if(v.photoUrl){
       html += `<img src="${v.photoUrl}" alt="${v.name}" onerror="this.style.display='none'" />`;
     }
-    html += `<a class="vp-link" href="https://www.marinetraffic.com/en/ais/details/ships/${v.imo}" target="_blank" rel="noopener">ð View on MarineTraffic â</a>`;
+    html += `<a class="vp-link" href="https://www.marinetraffic.com/en/ais/details/ships/${v.imo}" target="_blank" rel="noopener">🔍 View on MarineTraffic →</a>`;
     html += '</div>';
     return html;
   }
 
-  // ââ Chart ââ
+  // ── Chart ──
   const ctx = $('#transitChart').getContext('2d');
   const chartLabels = Array.from({length:24},(_,i)=>`${String(i).padStart(2,'0')}:00`);
   const hourBuckets = new Array(24).fill(0);
@@ -459,7 +459,7 @@
     }
   });
 
-  // ââ Traffic light logic ââ
+  // ── Traffic light logic ──
   function updateTrafficLight(queued, transit){
     const ratio = transit > 0 ? queued / transit : 99;
     document.querySelectorAll('.tl-dot').forEach(d => d.classList.remove('active'));
@@ -472,7 +472,7 @@
     }
   }
 
-  // ââ Days Until Dark ââ
+  // ── Days Until Dark ──
   function renderDaysUntilDark(throughputPerDay){
     const grid = $('#dark-grid');
     grid.innerHTML = '';
@@ -497,13 +497,13 @@
           <div class="dark-base">Base reserve: ${c.baseReserve} days</div>
           <div class="dark-bar-wrap"><div class="dark-bar ${cls}" style="width:${pct}%"></div></div>
         </div>
-        ${daysLeft < 10 ? '<div class="dark-warn-icon">â ï¸</div>' : ''}
+        ${daysLeft < 10 ? '<div class="dark-warn-icon">⚠️</div>' : ''}
       `;
       grid.appendChild(row);
     });
   }
 
-  // ââ Render ââ
+  // ── Render ──
   let lastRender = 0;
   function render(){
     const now_ms = Date.now();
@@ -520,9 +520,9 @@
     // Avg speed of transit vessels
     const avgSpeed = transit > 0
       ? (transitV.reduce((s,v)=>s+v.speed,0)/transit).toFixed(1)
-      : 'â';
+      : '—';
 
-    const avgWait = anchored > 0 ? (anchored * 2.3).toFixed(1) : 'â';
+    const avgWait = anchored > 0 ? (anchored * 2.3).toFixed(1) : '—';
 
     // KPIs
     $('#kpi-transit').textContent = transit;
@@ -531,14 +531,14 @@
     $('#kpi-brent').textContent   = '$' + CONFIG.BRENT_PRICE.toFixed(2);
 
     // Secondary stats
-    $('#sec-wait').textContent       = avgWait === 'â' ? ' â' : ' ' + avgWait + 'h';
+    $('#sec-wait').textContent       = avgWait === '—' ? ' —' : ' ' + avgWait + 'h';
     $('#sec-throughput').textContent  = ' ' + (cleared || transit);
     $('#sec-total').textContent       = ' ' + vessels.length;
 
     // Traffic light
     updateTrafficLight(queued + anchored, transit);
 
-    // Map markers â pulsing circles
+    // Map markers — pulsing circles
     markers.forEach(m=>map.removeLayer(m));
     markers=[];
     vessels.forEach(v=>{
@@ -558,12 +558,12 @@
     const order=['transit','queued','anchored','cleared'];
     const tbody=$('#vessel-tbody');
     tbody.innerHTML='';
-    [...vessels.sort((a,b)=>order.indexOf(a.status)-order.indexOf(b.status))].forEach(v=>{
+    [...vessels.].sort((a,b)=>order.indexOf(a.status)-order.indexOf(b.status)).forEach(v=>{
       tbody.innerHTML+=`<tr>
         <td><strong>${v.name}</strong></td>
         <td>${v.flag}</td><td>${v.type}</td>
         <td><span class="badge badge-${v.status}">${v.status}</span></td>
-        <td>${v.speed}</td><td>${v.heading}Â°</td><td>${v.lastSeen}</td>
+        <td>${v.speed}</td><td>${v.heading}°</td><td>${v.lastSeen}</td>
       </tr>`;
     });
 
@@ -578,7 +578,7 @@
     renderDaysUntilDark(estimatedDaily);
   }
 
-  // ââ Boot ââ
+  // ── Boot ──
   fetchVessels();
   setInterval(fetchVessels, CONFIG.REFRESH_MS);
 })();
