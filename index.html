@@ -558,7 +558,7 @@
     const order=['transit','queued','anchored','cleared'];
     const tbody=$('#vessel-tbody');
     tbody.innerHTML='';
-    [...vessels.].sort((a,b)=>order.indexOf(a.status)-order.indexOf(b.status)).forEach(v=>{
+    [...vessels].sort((a,b)=>order.indexOf(a.status)-order.indexOf(b.status)).forEach(v=>{
       tbody.innerHTML+=`<tr>
         <td><strong>${v.name}</strong></td>
         <td>${v.flag}</td><td>${v.type}</td>
