@@ -1,18 +1,18 @@
 {
-  "updated": "2026-04-28T17:16:04.920936+00:00",
+  "updated": "2026-04-28T18:56:46.152358+00:00",
   "source": "AISstream.io via GitHub Actions",
   "vessels": [
     {
-      "imo": 352003912,
-      "name": "QUANTUM STAR",
+      "imo": 477223600,
+      "name": "LUMINA POLARIS",
       "flag": "--",
       "type": "Vessel",
       "status": "anchored",
       "speed": 0.0,
-      "heading": 31,
-      "lat": 25.34208,
-      "lng": 56.54664,
-      "last_seen": "2026-04-28 17:15 UTC"
+      "heading": 61,
+      "lat": 25.28276,
+      "lng": 57.03423,
+      "last_seen": "2026-04-28 18:56 UTC"
     }
   ]
 }
