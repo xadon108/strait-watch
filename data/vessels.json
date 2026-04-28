@@ -1,5 +1,18 @@
 {
-  "updated": "2026-04-28T15:33:09.590388+00:00",
+  "updated": "2026-04-28T17:16:04.920936+00:00",
   "source": "AISstream.io via GitHub Actions",
-  "vessels": []
+  "vessels": [
+    {
+      "imo": 352003912,
+      "name": "QUANTUM STAR",
+      "flag": "--",
+      "type": "Vessel",
+      "status": "anchored",
+      "speed": 0.0,
+      "heading": 31,
+      "lat": 25.34208,
+      "lng": 56.54664,
+      "last_seen": "2026-04-28 17:15 UTC"
+    }
+  ]
 }
