@@ -1,5 +1,18 @@
 {
-  "updated": "2026-04-28T22:37:22.616043+00:00",
+  "updated": "2026-04-28T23:36:26.999287+00:00",
   "source": "AISstream.io via GitHub Actions",
-  "vessels": []
+  "vessels": [
+    {
+      "imo": 477223600,
+      "name": "LUMINA POLARIS",
+      "flag": "--",
+      "type": "Vessel",
+      "status": "anchored",
+      "speed": 0.0,
+      "heading": 43,
+      "lat": 25.28341,
+      "lng": 57.03422,
+      "last_seen": "2026-04-28 23:35 UTC"
+    }
+  ]
 }
