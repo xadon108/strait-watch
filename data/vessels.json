@@ -1,5 +1,18 @@
 {
-  "updated": "2026-04-29T15:23:32.378380+00:00",
+  "updated": "2026-04-29T16:59:57.863751+00:00",
   "source": "AISstream.io via GitHub Actions",
-  "vessels": []
+  "vessels": [
+    {
+      "imo": 650000177,
+      "name": "SOUFIA1",
+      "flag": "--",
+      "type": "Vessel",
+      "status": "anchored",
+      "speed": 0.0,
+      "heading": 0,
+      "lat": 26.93073,
+      "lng": 56.43495,
+      "last_seen": "2026-04-29 16:59 UTC"
+    }
+  ]
 }
