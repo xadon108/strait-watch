@@ -1,5 +1,18 @@
 {
-  "updated": "2026-05-01T00:10:03.677369+00:00",
+  "updated": "2026-05-01T04:18:04.434904+00:00",
   "source": "AISstream.io via GitHub Actions",
-  "vessels": []
+  "vessels": [
+    {
+      "imo": 477638800,
+      "name": "MMSI 477638800",
+      "flag": "--",
+      "type": "Vessel",
+      "status": "anchored",
+      "speed": 0.1,
+      "heading": 226,
+      "lat": 25.8268,
+      "lng": 55.61562,
+      "last_seen": "2026-05-01 04:17 UTC"
+    }
+  ]
 }
