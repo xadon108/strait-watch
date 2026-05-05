@@ -1,18 +1,5 @@
 {
-  "updated": "2026-05-05T06:07:26.744316+00:00",
+  "updated": "2026-05-05T08:27:31.432592+00:00",
   "source": "AISstream.io via GitHub Actions",
-  "vessels": [
-    {
-      "imo": 341028000,
-      "name": "ALMA NOVA",
-      "flag": "--",
-      "type": "Vessel",
-      "status": "anchored",
-      "speed": 0.1,
-      "heading": 180,
-      "lat": 26.30555,
-      "lng": 56.24996,
-      "last_seen": "2026-05-05 06:06 UTC"
-    }
-  ]
+  "vessels": []
 }
