@@ -1,42 +1,18 @@
 {
-  "updated": "2026-05-07T21:05:43.443416+00:00",
+  "updated": "2026-05-07T22:14:34.068276+00:00",
   "source": "AISstream.io via GitHub Actions",
   "vessels": [
     {
-      "imo": 538007333,
-      "name": "TOPAZ OB",
+      "imo": 630001095,
+      "name": "MO JOUD",
       "flag": "--",
       "type": "Vessel",
       "status": "anchored",
-      "speed": 0.4,
-      "heading": 26,
-      "lat": 27.11134,
-      "lng": 56.01625,
-      "last_seen": "2026-05-07 21:04 UTC"
-    },
-    {
-      "imo": 538007322,
-      "name": "TOPAZ SVIR",
-      "flag": "--",
-      "type": "Vessel",
-      "status": "anchored",
-      "speed": 0.4,
-      "heading": 7,
-      "lat": 27.11134,
-      "lng": 56.01604,
-      "last_seen": "2026-05-07 21:04 UTC"
-    },
-    {
-      "imo": 636022477,
-      "name": "SOYIA",
-      "flag": "--",
-      "type": "Vessel",
-      "status": "anchored",
-      "speed": 1.2,
-      "heading": 8,
-      "lat": 27.11126,
-      "lng": 56.01623,
-      "last_seen": "2026-05-07 21:04 UTC"
+      "speed": 0.0,
+      "heading": 0,
+      "lat": 27.09343,
+      "lng": 56.0503,
+      "last_seen": "2026-05-07 22:14 UTC"
     }
   ]
 }
