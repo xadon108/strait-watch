@@ -1,18 +1,5 @@
 {
-  "updated": "2026-05-08T00:10:16.638912+00:00",
+  "updated": "2026-05-08T03:54:34.666943+00:00",
   "source": "AISstream.io via GitHub Actions",
-  "vessels": [
-    {
-      "imo": 630001095,
-      "name": "MO JOUD",
-      "flag": "--",
-      "type": "Vessel",
-      "status": "anchored",
-      "speed": 0.0,
-      "heading": 0,
-      "lat": 27.09343,
-      "lng": 56.0503,
-      "last_seen": "2026-05-08 00:10 UTC"
-    }
-  ]
+  "vessels": []
 }
