@@ -1,5 +1,5 @@
 {
-  "updated": "2026-05-07T23:14:10.381308+00:00",
+  "updated": "2026-05-08T00:10:16.638912+00:00",
   "source": "AISstream.io via GitHub Actions",
   "vessels": [
     {
@@ -12,7 +12,7 @@
       "heading": 0,
       "lat": 27.09343,
       "lng": 56.0503,
-      "last_seen": "2026-05-07 23:13 UTC"
+      "last_seen": "2026-05-08 00:10 UTC"
     }
   ]
 }
