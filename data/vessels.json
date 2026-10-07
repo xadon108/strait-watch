@@ -1,18 +1,5 @@
 {
-  "updated": "2026-10-07T06:39:31.527678+00:00",
+  "updated": "2026-10-07T13:57:19.188233+00:00",
   "source": "AISstream.io via GitHub Actions",
-  "vessels": [
-    {
-      "imo": 352690000,
-      "name": "H7 PMB2",
-      "flag": "--",
-      "type": "Vessel",
-      "status": "transit",
-      "speed": 9.9,
-      "heading": 296,
-      "lat": 26.73039,
-      "lng": 56.73236,
-      "last_seen": "2026-10-07 06:38 UTC"
-    }
-  ]
+  "vessels": []
 }
