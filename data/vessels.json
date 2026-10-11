@@ -1,18 +1,30 @@
 {
-  "updated": "2026-10-11T06:20:07.504796+00:00",
+  "updated": "2026-10-11T13:08:36.164363+00:00",
   "source": "AISstream.io via GitHub Actions",
   "vessels": [
     {
-      "imo": 436000187,
-      "name": "MMSI 436000187",
+      "imo": 422040800,
+      "name": "MMSI 422040800",
       "flag": "--",
       "type": "Vessel",
       "status": "anchored",
-      "speed": 0.0,
-      "heading": 239.3,
-      "lat": 25.46884,
-      "lng": 55.50804,
-      "last_seen": "2026-10-11 06:19 UTC"
+      "speed": 0.3,
+      "heading": 273,
+      "lat": 27.0008,
+      "lng": 56.38457,
+      "last_seen": "2026-10-11 13:08 UTC"
+    },
+    {
+      "imo": 356359000,
+      "name": "MOSHTARAKA 1",
+      "flag": "--",
+      "type": "Vessel",
+      "status": "transit",
+      "speed": 7.1,
+      "heading": 276,
+      "lat": 26.00691,
+      "lng": 55.72906,
+      "last_seen": "2026-10-11 13:08 UTC"
     }
   ]
 }
