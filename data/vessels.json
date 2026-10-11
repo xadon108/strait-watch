@@ -1,18 +1,66 @@
 {
-  "updated": "2026-10-11T18:04:21.348880+00:00",
+  "updated": "2026-10-11T21:52:05.174999+00:00",
   "source": "AISstream.io via GitHub Actions",
   "vessels": [
     {
-      "imo": 301000465,
-      "name": "MMSI 301000465",
+      "imo": 470838000,
+      "name": "INCHCAPE 21",
       "flag": "--",
       "type": "Vessel",
       "status": "transit",
-      "speed": 7.5,
-      "heading": 218,
-      "lat": 25.98877,
-      "lng": 55.59337,
-      "last_seen": "2026-10-11 18:03 UTC"
+      "speed": 10.4,
+      "heading": 263.5,
+      "lat": 25.97672,
+      "lng": 55.94549,
+      "last_seen": "2026-10-11 21:51 UTC"
+    },
+    {
+      "imo": 671404100,
+      "name": "NEPTUNE",
+      "flag": "--",
+      "type": "Vessel",
+      "status": "transit",
+      "speed": 7.1,
+      "heading": 223,
+      "lat": 25.90512,
+      "lng": 55.61165,
+      "last_seen": "2026-10-11 21:51 UTC"
+    },
+    {
+      "imo": 9781372,
+      "name": "ADNOC SR54",
+      "flag": "HAMRIYAH            ",
+      "type": "Vessel",
+      "status": "anchored",
+      "speed": 0.2,
+      "heading": 296,
+      "lat": 25.82362,
+      "lng": 55.83561,
+      "last_seen": "2026-10-11 21:51 UTC"
+    },
+    {
+      "imo": 352002917,
+      "name": "SANA",
+      "flag": "--",
+      "type": "Vessel",
+      "status": "transit",
+      "speed": 6.0,
+      "heading": 208,
+      "lat": 25.96684,
+      "lng": 55.66433,
+      "last_seen": "2026-10-11 21:51 UTC"
+    },
+    {
+      "imo": 408387000,
+      "name": "BBT 103",
+      "flag": "--",
+      "type": "Vessel",
+      "status": "transit",
+      "speed": 2.4,
+      "heading": 91,
+      "lat": 25.9572,
+      "lng": 55.9497,
+      "last_seen": "2026-10-11 21:52 UTC"
     }
   ]
 }
