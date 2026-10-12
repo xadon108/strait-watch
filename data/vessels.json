@@ -1,18 +1,5 @@
 {
-  "updated": "2026-10-12T16:08:48.119785+00:00",
+  "updated": "2026-10-12T22:57:52.224807+00:00",
   "source": "AISstream.io via GitHub Actions",
-  "vessels": [
-    {
-      "imo": 236587000,
-      "name": "TELFORD 31",
-      "flag": "--",
-      "type": "Vessel",
-      "status": "transit",
-      "speed": 3.6,
-      "heading": 255,
-      "lat": 25.82837,
-      "lng": 55.59626,
-      "last_seen": "2026-10-12 16:07 UTC"
-    }
-  ]
+  "vessels": []
 }
