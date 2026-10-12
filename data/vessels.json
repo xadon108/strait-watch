@@ -1,66 +1,72 @@
 {
-  "updated": "2026-10-11T21:52:05.174999+00:00",
+  "updated": "2026-10-12T00:50:26.313228+00:00",
   "source": "AISstream.io via GitHub Actions",
   "vessels": [
     {
-      "imo": 470838000,
-      "name": "INCHCAPE 21",
+      "imo": 511101956,
+      "name": "NEW BORN 26",
       "flag": "--",
       "type": "Vessel",
       "status": "transit",
-      "speed": 10.4,
-      "heading": 263.5,
-      "lat": 25.97672,
-      "lng": 55.94549,
-      "last_seen": "2026-10-11 21:51 UTC"
+      "speed": 10.0,
+      "heading": 69,
+      "lat": 25.85872,
+      "lng": 55.57721,
+      "last_seen": "2026-10-12 00:49 UTC"
     },
     {
-      "imo": 671404100,
-      "name": "NEPTUNE",
+      "imo": 374802000,
+      "name": "LOUISE",
       "flag": "--",
       "type": "Vessel",
       "status": "transit",
-      "speed": 7.1,
-      "heading": 223,
-      "lat": 25.90512,
-      "lng": 55.61165,
-      "last_seen": "2026-10-11 21:51 UTC"
+      "speed": 1.3,
+      "heading": 77,
+      "lat": 25.75427,
+      "lng": 55.72112,
+      "last_seen": "2026-10-12 00:49 UTC"
     },
     {
-      "imo": 9781372,
-      "name": "ADNOC SR54",
+      "imo": 9641479,
+      "name": "CASPIAN SKUA",
       "flag": "HAMRIYAH            ",
+      "type": "Vessel"
+    },
+    {
+      "imo": 341633002,
+      "name": "UPWAY LUCIA",
+      "flag": "--",
+      "type": "Vessel",
+      "status": "queued",
+      "speed": 0.0,
+      "heading": 105.8,
+      "lat": 26.01203,
+      "lng": 55.81386,
+      "last_seen": "2026-10-12 00:49 UTC"
+    },
+    {
+      "imo": 246885000,
+      "name": "COASTAL VOYAGER",
+      "flag": "--",
       "type": "Vessel",
       "status": "anchored",
-      "speed": 0.2,
-      "heading": 296,
-      "lat": 25.82362,
-      "lng": 55.83561,
-      "last_seen": "2026-10-11 21:51 UTC"
+      "speed": 0.0,
+      "heading": 118,
+      "lat": 25.4708,
+      "lng": 55.51068,
+      "last_seen": "2026-10-12 00:50 UTC"
     },
     {
-      "imo": 352002917,
-      "name": "SANA",
+      "imo": 620092000,
+      "name": "MMSI 620092000",
       "flag": "--",
       "type": "Vessel",
-      "status": "transit",
-      "speed": 6.0,
-      "heading": 208,
-      "lat": 25.96684,
-      "lng": 55.66433,
-      "last_seen": "2026-10-11 21:51 UTC"
-    },
-    {
-      "imo": 408387000,
-      "name": "BBT 103",
-      "flag": "--",
-      "type": "Vessel",
-      "status": "transit",
-      "speed": 2.4,
-      "heading": 91,
-      "lat": 25.9572,
-      "lng": 55.9497,
-      "last_seen": "2026-10-11 21:52 UTC"
+      "status": "anchored",
+      "speed": 0.0,
+      "heading": 360,
+      "lat": 25.63829,
+      "lng": 55.71593,
+      "last_seen": "2026-10-12 00:50 UTC"
     }
   ]
 }
