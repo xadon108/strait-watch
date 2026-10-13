@@ -1,5 +1,18 @@
 {
-  "updated": "2026-10-12T22:57:52.224807+00:00",
+  "updated": "2026-10-13T03:27:06.436872+00:00",
   "source": "AISstream.io via GitHub Actions",
-  "vessels": []
+  "vessels": [
+    {
+      "imo": 436000405,
+      "name": "CASPIAN AMWAJ",
+      "flag": "--",
+      "type": "Vessel",
+      "status": "anchored",
+      "speed": 0.0,
+      "heading": 211,
+      "lat": 25.46815,
+      "lng": 55.50353,
+      "last_seen": "2026-10-13 03:26 UTC"
+    }
+  ]
 }
