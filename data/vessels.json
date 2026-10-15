@@ -1,5 +1,30 @@
 {
-  "updated": "2026-10-15T06:32:46.471568+00:00",
+  "updated": "2026-10-15T12:02:04.136565+00:00",
   "source": "AISstream.io via GitHub Actions",
-  "vessels": []
+  "vessels": [
+    {
+      "imo": 477588700,
+      "name": "CASPIAN HARMONY",
+      "flag": "--",
+      "type": "Vessel",
+      "status": "transit",
+      "speed": 11.2,
+      "heading": 246,
+      "lat": 26.47481,
+      "lng": 55.85553,
+      "last_seen": "2026-10-15 12:01 UTC"
+    },
+    {
+      "imo": 259271000,
+      "name": "FELICITY",
+      "flag": "--",
+      "type": "Vessel",
+      "status": "anchored",
+      "speed": 0.1,
+      "heading": 172,
+      "lat": 26.03725,
+      "lng": 55.82878,
+      "last_seen": "2026-10-15 12:01 UTC"
+    }
+  ]
 }
