@@ -1,18 +1,5 @@
 {
-  "updated": "2026-10-15T16:52:01.387984+00:00",
+  "updated": "2026-10-15T20:08:03.916085+00:00",
   "source": "AISstream.io via GitHub Actions",
-  "vessels": [
-    {
-      "imo": 632001092,
-      "name": "XAVIA",
-      "flag": "--",
-      "type": "Vessel",
-      "status": "anchored",
-      "speed": 0.1,
-      "heading": 326,
-      "lat": 24.8475,
-      "lng": 56.579,
-      "last_seen": "2026-10-15 16:51 UTC"
-    }
-  ]
+  "vessels": []
 }
