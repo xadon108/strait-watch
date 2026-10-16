@@ -1,18 +1,30 @@
 {
-  "updated": "2026-10-16T15:09:53.655607+00:00",
+  "updated": "2026-10-16T18:49:06.545021+00:00",
   "source": "AISstream.io via GitHub Actions",
   "vessels": [
     {
-      "imo": 341633002,
-      "name": "UPWAY LUCIA",
+      "imo": 574006430,
+      "name": "MONARCH",
       "flag": "--",
       "type": "Vessel",
-      "status": "queued",
-      "speed": 0.1,
-      "heading": 320.6,
-      "lat": 26.01207,
-      "lng": 55.81411,
-      "last_seen": "2026-10-16 15:09 UTC"
+      "status": "transit",
+      "speed": 2.9,
+      "heading": 117,
+      "lat": 25.34939,
+      "lng": 56.9586,
+      "last_seen": "2026-10-16 18:48 UTC"
+    },
+    {
+      "imo": 341884000,
+      "name": "LUCIA",
+      "flag": "--",
+      "type": "Vessel",
+      "status": "transit",
+      "speed": 5.8,
+      "heading": 224,
+      "lat": 26.27961,
+      "lng": 55.72545,
+      "last_seen": "2026-10-16 18:48 UTC"
     }
   ]
 }
