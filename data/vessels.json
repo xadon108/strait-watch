@@ -1,18 +1,18 @@
 {
-  "updated": "2026-10-16T10:54:13.985667+00:00",
+  "updated": "2026-10-16T15:09:53.655607+00:00",
   "source": "AISstream.io via GitHub Actions",
   "vessels": [
     {
-      "imo": 314314000,
-      "name": "STARWAY",
+      "imo": 341633002,
+      "name": "UPWAY LUCIA",
       "flag": "--",
       "type": "Vessel",
-      "status": "anchored",
-      "speed": 46.7,
-      "heading": 262.2,
-      "lat": 26.28276,
-      "lng": 56.20305,
-      "last_seen": "2026-10-16 10:53 UTC"
+      "status": "queued",
+      "speed": 0.1,
+      "heading": 320.6,
+      "lat": 26.01207,
+      "lng": 55.81411,
+      "last_seen": "2026-10-16 15:09 UTC"
     }
   ]
 }
