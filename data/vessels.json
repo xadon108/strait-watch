@@ -1,36 +1,5 @@
 {
-  "updated": "2026-10-16T01:15:50.359192+00:00",
+  "updated": "2026-10-16T05:56:10.679946+00:00",
   "source": "AISstream.io via GitHub Actions",
-  "vessels": [
-    {
-      "imo": 620800666,
-      "name": "ARK SAHEL",
-      "flag": "--",
-      "type": "Vessel",
-      "status": "transit",
-      "speed": 8.9,
-      "heading": 236.6,
-      "lat": 25.88516,
-      "lng": 55.51669,
-      "last_seen": "2026-10-16 01:15 UTC"
-    },
-    {
-      "imo": 341372002,
-      "name": "ALMAJD I",
-      "flag": "--",
-      "type": "Vessel",
-      "status": "transit",
-      "speed": 5.3,
-      "heading": 90,
-      "lat": 26.0093,
-      "lng": 55.65426,
-      "last_seen": "2026-10-16 01:15 UTC"
-    },
-    {
-      "imo": 9995002,
-      "name": "P&O ASIA",
-      "flag": "DUBAI E ANCHORAGE   ",
-      "type": "Vessel"
-    }
-  ]
+  "vessels": []
 }
