@@ -1,19 +1,7 @@
 {
-  "updated": "2026-10-16T23:59:04.555770+00:00",
+  "updated": "2026-10-17T04:10:05.560478+00:00",
   "source": "AISstream.io via GitHub Actions",
   "vessels": [
-    {
-      "imo": 314001096,
-      "name": "EXPLORER",
-      "flag": "--",
-      "type": "Vessel",
-      "status": "anchored",
-      "speed": 0.1,
-      "heading": 3,
-      "lat": 24.79603,
-      "lng": 56.61151,
-      "last_seen": "2026-10-16 23:58 UTC"
-    },
     {
       "imo": 352003496,
       "name": "OCEAN WEALTH",
@@ -21,34 +9,10 @@
       "type": "Vessel",
       "status": "anchored",
       "speed": 0.0,
-      "heading": 101,
-      "lat": 25.32439,
-      "lng": 56.8036,
-      "last_seen": "2026-10-16 23:58 UTC"
-    },
-    {
-      "imo": 354991000,
-      "name": "MMPL MERLIN",
-      "flag": "--",
-      "type": "Vessel",
-      "status": "transit",
-      "speed": 1.0,
-      "heading": 327,
-      "lat": 24.84196,
-      "lng": 57.16184,
-      "last_seen": "2026-10-16 23:58 UTC"
-    },
-    {
-      "imo": 370088000,
-      "name": "AFFABLE",
-      "flag": "--",
-      "type": "Vessel",
-      "status": "anchored",
-      "speed": 0.0,
-      "heading": 68.2,
-      "lat": 26.05699,
-      "lng": 56.08489,
-      "last_seen": "2026-10-16 23:58 UTC"
+      "heading": 131,
+      "lat": 25.32523,
+      "lng": 56.80417,
+      "last_seen": "2026-10-17 04:09 UTC"
     }
   ]
 }
