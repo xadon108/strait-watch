@@ -1,18 +1,5 @@
 {
-  "updated": "2026-10-17T17:59:22.929689+00:00",
+  "updated": "2026-10-17T20:29:06.022152+00:00",
   "source": "AISstream.io via GitHub Actions",
-  "vessels": [
-    {
-      "imo": 620999774,
-      "name": "DIAKO1",
-      "flag": "--",
-      "type": "Vessel",
-      "status": "transit",
-      "speed": 8.4,
-      "heading": 93,
-      "lat": 26.02806,
-      "lng": 55.80585,
-      "last_seen": "2026-10-17 17:58 UTC"
-    }
-  ]
+  "vessels": []
 }
