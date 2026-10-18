@@ -1,5 +1,30 @@
 {
-  "updated": "2026-10-18T13:17:35.975654+00:00",
+  "updated": "2026-10-18T16:36:53.294509+00:00",
   "source": "AISstream.io via GitHub Actions",
-  "vessels": []
+  "vessels": [
+    {
+      "imo": 301000431,
+      "name": "LCT NEZAMI GANJAVI 6",
+      "flag": "--",
+      "type": "Vessel",
+      "status": "transit",
+      "speed": 7.6,
+      "heading": 265.2,
+      "lat": 26.2597,
+      "lng": 56.19914,
+      "last_seen": "2026-10-18 16:36 UTC"
+    },
+    {
+      "imo": 632001092,
+      "name": "XAVIA",
+      "flag": "--",
+      "type": "Vessel",
+      "status": "anchored",
+      "speed": 0.1,
+      "heading": 112,
+      "lat": 24.84699,
+      "lng": 56.57984,
+      "last_seen": "2026-10-18 16:36 UTC"
+    }
+  ]
 }
