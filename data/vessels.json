@@ -1,5 +1,18 @@
 {
-  "updated": "2026-10-18T00:16:38.460568+00:00",
+  "updated": "2026-10-18T04:45:52.179987+00:00",
   "source": "AISstream.io via GitHub Actions",
-  "vessels": []
+  "vessels": [
+    {
+      "imo": 352373000,
+      "name": "SPARROW",
+      "flag": "--",
+      "type": "Vessel",
+      "status": "transit",
+      "speed": 6.0,
+      "heading": 91.7,
+      "lat": 24.56909,
+      "lng": 57.74538,
+      "last_seen": "2026-10-18 04:45 UTC"
+    }
+  ]
 }
