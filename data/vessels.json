@@ -1,5 +1,42 @@
 {
-  "updated": "2026-10-18T23:23:18.309998+00:00",
+  "updated": "2026-10-19T01:28:59.014066+00:00",
   "source": "AISstream.io via GitHub Actions",
-  "vessels": []
+  "vessels": [
+    {
+      "imo": 224069000,
+      "name": "VBF SPIRIT",
+      "flag": "--",
+      "type": "Vessel",
+      "status": "anchored",
+      "speed": 0.0,
+      "heading": 302,
+      "lat": 25.46861,
+      "lng": 55.50312,
+      "last_seen": "2026-10-19 01:28 UTC"
+    },
+    {
+      "imo": 224174000,
+      "name": "VB BOLU",
+      "flag": "--",
+      "type": "Vessel",
+      "status": "anchored",
+      "speed": 0.0,
+      "heading": 298,
+      "lat": 25.4685,
+      "lng": 55.50306,
+      "last_seen": "2026-10-19 01:28 UTC"
+    },
+    {
+      "imo": 246885000,
+      "name": "COASTAL VOYAGER",
+      "flag": "--",
+      "type": "Vessel",
+      "status": "anchored",
+      "speed": 0.0,
+      "heading": 208,
+      "lat": 25.46983,
+      "lng": 55.51119,
+      "last_seen": "2026-10-19 01:28 UTC"
+    }
+  ]
 }
