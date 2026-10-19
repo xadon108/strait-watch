@@ -1,5 +1,18 @@
 {
-  "updated": "2026-10-19T14:00:52.123775+00:00",
+  "updated": "2026-10-19T19:48:03.258265+00:00",
   "source": "AISstream.io via GitHub Actions",
-  "vessels": []
+  "vessels": [
+    {
+      "imo": 436000111,
+      "name": "CASPIAN LOTUS",
+      "flag": "--",
+      "type": "Vessel",
+      "status": "anchored",
+      "speed": 0.0,
+      "heading": 205,
+      "lat": 25.46983,
+      "lng": 55.51111,
+      "last_seen": "2026-10-19 19:47 UTC"
+    }
+  ]
 }
