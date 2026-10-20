@@ -1,5 +1,30 @@
 {
-  "updated": "2026-10-20T20:44:55.550002+00:00",
+  "updated": "2026-10-20T23:28:29.093883+00:00",
   "source": "AISstream.io via GitHub Actions",
-  "vessels": []
+  "vessels": [
+    {
+      "imo": 372989000,
+      "name": "KHALEJIA ANA 5",
+      "flag": "--",
+      "type": "Vessel",
+      "status": "anchored",
+      "speed": 0.0,
+      "heading": 230,
+      "lat": 26.0638,
+      "lng": 55.96034,
+      "last_seen": "2026-10-20 23:27 UTC"
+    },
+    {
+      "imo": 408821000,
+      "name": "ALMOAYYED 32",
+      "flag": "--",
+      "type": "Vessel",
+      "status": "transit",
+      "speed": 3.1,
+      "heading": 101,
+      "lat": 25.99576,
+      "lng": 55.9711,
+      "last_seen": "2026-10-20 23:28 UTC"
+    }
+  ]
 }
