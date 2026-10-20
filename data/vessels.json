@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-19T23:09:10.799995+00:00",
+  "updated": "2026-10-20T01:49:36.105921+00:00",
   "source": "AISstream.io via GitHub Actions",
   "vessels": [
     {
@@ -9,10 +9,28 @@
       "type": "Vessel",
       "status": "anchored",
       "speed": 0.0,
-      "heading": 205,
-      "lat": 25.46984,
+      "heading": 208,
+      "lat": 25.46983,
       "lng": 55.51112,
-      "last_seen": "2026-10-19 23:09 UTC"
+      "last_seen": "2026-10-20 01:48 UTC"
+    },
+    {
+      "imo": 9771119,
+      "name": "HERCULES",
+      "flag": "HAMRIYA",
+      "type": "Vessel"
+    },
+    {
+      "imo": 511101956,
+      "name": "NEW BORN 26",
+      "flag": "--",
+      "type": "Vessel",
+      "status": "anchored",
+      "speed": 0.0,
+      "heading": 348,
+      "lat": 26.04691,
+      "lng": 55.95295,
+      "last_seen": "2026-10-20 01:48 UTC"
     }
   ]
 }
