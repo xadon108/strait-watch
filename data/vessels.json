@@ -1,30 +1,66 @@
 {
-  "updated": "2026-10-21T17:55:28.301799+00:00",
+  "updated": "2026-10-21T21:18:06.871619+00:00",
   "source": "AISstream.io via GitHub Actions",
   "vessels": [
     {
-      "imo": 620800367,
-      "name": "TRONE",
-      "flag": "--",
-      "type": "Vessel",
-      "status": "anchored",
-      "speed": 0.1,
-      "heading": 184,
-      "lat": 25.76089,
-      "lng": 57.04759,
-      "last_seen": "2026-10-21 17:54 UTC"
-    },
-    {
-      "imo": 436000111,
-      "name": "CASPIAN LOTUS",
+      "imo": 376285000,
+      "name": "DMS TOUCAN",
       "flag": "--",
       "type": "Vessel",
       "status": "anchored",
       "speed": 0.0,
-      "heading": 206,
-      "lat": 25.46989,
-      "lng": 55.51104,
-      "last_seen": "2026-10-21 17:54 UTC"
+      "heading": 43,
+      "lat": 25.46953,
+      "lng": 55.50872,
+      "last_seen": "2026-10-21 21:17 UTC"
+    },
+    {
+      "imo": 538011658,
+      "name": "P&O KATARA",
+      "flag": "--",
+      "type": "Vessel",
+      "status": "anchored",
+      "speed": 0.0,
+      "heading": 279.6,
+      "lat": 25.46714,
+      "lng": 55.50527,
+      "last_seen": "2026-10-21 21:17 UTC"
+    },
+    {
+      "imo": 511102044,
+      "name": "ZAYA",
+      "flag": "--",
+      "type": "Vessel",
+      "status": "anchored",
+      "speed": 0.0,
+      "heading": 297,
+      "lat": 25.46763,
+      "lng": 55.50436,
+      "last_seen": "2026-10-21 21:17 UTC"
+    },
+    {
+      "imo": 436000187,
+      "name": "CASPIAN  SEAGULL",
+      "flag": "--",
+      "type": "Vessel",
+      "status": "anchored",
+      "speed": 0.0,
+      "heading": 123,
+      "lat": 25.46821,
+      "lng": 55.50758,
+      "last_seen": "2026-10-21 21:17 UTC"
+    },
+    {
+      "imo": 470013000,
+      "name": "GROUPER ANN 2",
+      "flag": "--",
+      "type": "Vessel",
+      "status": "anchored",
+      "speed": 0.0,
+      "heading": 360,
+      "lat": 25.466,
+      "lng": 55.50368,
+      "last_seen": "2026-10-21 21:17 UTC"
     },
     {
       "imo": 470000002,
@@ -33,10 +69,34 @@
       "type": "Vessel",
       "status": "anchored",
       "speed": 0.0,
-      "heading": 122,
-      "lat": 25.47029,
-      "lng": 55.50899,
-      "last_seen": "2026-10-21 17:55 UTC"
+      "heading": 121,
+      "lat": 25.47032,
+      "lng": 55.50904,
+      "last_seen": "2026-10-21 21:17 UTC"
+    },
+    {
+      "imo": 511101956,
+      "name": "NEW BORN 26",
+      "flag": "--",
+      "type": "Vessel",
+      "status": "transit",
+      "speed": 0.8,
+      "heading": 184,
+      "lat": 26.03395,
+      "lng": 55.94634,
+      "last_seen": "2026-10-21 21:17 UTC"
+    },
+    {
+      "imo": 470460000,
+      "name": "TUNA ANN",
+      "flag": "--",
+      "type": "Vessel",
+      "status": "anchored",
+      "speed": 0.0,
+      "heading": 360,
+      "lat": 25.46611,
+      "lng": 55.50324,
+      "last_seen": "2026-10-21 21:17 UTC"
     }
   ]
 }
