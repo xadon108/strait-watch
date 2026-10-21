@@ -1,5 +1,30 @@
 {
-  "updated": "2026-10-21T01:55:35.986779+00:00",
+  "updated": "2026-10-21T07:08:23.680150+00:00",
   "source": "AISstream.io via GitHub Actions",
-  "vessels": []
+  "vessels": [
+    {
+      "imo": 538004814,
+      "name": "TOPAZ RAYYAN",
+      "flag": "--",
+      "type": "Vessel",
+      "status": "anchored",
+      "speed": 0.2,
+      "heading": 360,
+      "lat": 25.78821,
+      "lng": 55.58398,
+      "last_seen": "2026-10-21 07:07 UTC"
+    },
+    {
+      "imo": 341064000,
+      "name": "MMSI 341064000",
+      "flag": "--",
+      "type": "Vessel",
+      "status": "anchored",
+      "speed": 0.0,
+      "heading": 147.6,
+      "lat": 25.7652,
+      "lng": 55.76441,
+      "last_seen": "2026-10-21 07:07 UTC"
+    }
+  ]
 }
