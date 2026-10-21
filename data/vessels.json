@@ -1,42 +1,42 @@
 {
-  "updated": "2026-10-21T12:55:27.406482+00:00",
+  "updated": "2026-10-21T17:55:28.301799+00:00",
   "source": "AISstream.io via GitHub Actions",
   "vessels": [
     {
-      "imo": 235069938,
-      "name": "DULAS ISLAND",
+      "imo": 620800367,
+      "name": "TRONE",
+      "flag": "--",
+      "type": "Vessel",
+      "status": "anchored",
+      "speed": 0.1,
+      "heading": 184,
+      "lat": 25.76089,
+      "lng": 57.04759,
+      "last_seen": "2026-10-21 17:54 UTC"
+    },
+    {
+      "imo": 436000111,
+      "name": "CASPIAN LOTUS",
       "flag": "--",
       "type": "Vessel",
       "status": "anchored",
       "speed": 0.0,
-      "heading": 207,
-      "lat": 25.46846,
-      "lng": 55.50545,
-      "last_seen": "2026-10-21 12:54 UTC"
+      "heading": 206,
+      "lat": 25.46989,
+      "lng": 55.51104,
+      "last_seen": "2026-10-21 17:54 UTC"
     },
     {
-      "imo": 408821000,
-      "name": "ALMOAYYED 32",
+      "imo": 470000002,
+      "name": "YN513247",
       "flag": "--",
       "type": "Vessel",
-      "status": "transit",
-      "speed": 2.6,
-      "heading": 247.2,
-      "lat": 25.98132,
-      "lng": 55.97828,
-      "last_seen": "2026-10-21 12:54 UTC"
-    },
-    {
-      "imo": 471143000,
-      "name": "MMSI 471143000",
-      "flag": "--",
-      "type": "Vessel",
-      "status": "transit",
-      "speed": 3.8,
-      "heading": 203.2,
-      "lat": 25.68552,
-      "lng": 55.76233,
-      "last_seen": "2026-10-21 12:55 UTC"
+      "status": "anchored",
+      "speed": 0.0,
+      "heading": 122,
+      "lat": 25.47029,
+      "lng": 55.50899,
+      "last_seen": "2026-10-21 17:55 UTC"
     }
   ]
 }
