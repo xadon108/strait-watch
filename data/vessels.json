@@ -1,30 +1,42 @@
 {
-  "updated": "2026-10-21T07:08:23.680150+00:00",
+  "updated": "2026-10-21T12:55:27.406482+00:00",
   "source": "AISstream.io via GitHub Actions",
   "vessels": [
     {
-      "imo": 538004814,
-      "name": "TOPAZ RAYYAN",
-      "flag": "--",
-      "type": "Vessel",
-      "status": "anchored",
-      "speed": 0.2,
-      "heading": 360,
-      "lat": 25.78821,
-      "lng": 55.58398,
-      "last_seen": "2026-10-21 07:07 UTC"
-    },
-    {
-      "imo": 341064000,
-      "name": "MMSI 341064000",
+      "imo": 235069938,
+      "name": "DULAS ISLAND",
       "flag": "--",
       "type": "Vessel",
       "status": "anchored",
       "speed": 0.0,
-      "heading": 147.6,
-      "lat": 25.7652,
-      "lng": 55.76441,
-      "last_seen": "2026-10-21 07:07 UTC"
+      "heading": 207,
+      "lat": 25.46846,
+      "lng": 55.50545,
+      "last_seen": "2026-10-21 12:54 UTC"
+    },
+    {
+      "imo": 408821000,
+      "name": "ALMOAYYED 32",
+      "flag": "--",
+      "type": "Vessel",
+      "status": "transit",
+      "speed": 2.6,
+      "heading": 247.2,
+      "lat": 25.98132,
+      "lng": 55.97828,
+      "last_seen": "2026-10-21 12:54 UTC"
+    },
+    {
+      "imo": 471143000,
+      "name": "MMSI 471143000",
+      "flag": "--",
+      "type": "Vessel",
+      "status": "transit",
+      "speed": 3.8,
+      "heading": 203.2,
+      "lat": 25.68552,
+      "lng": 55.76233,
+      "last_seen": "2026-10-21 12:55 UTC"
     }
   ]
 }
